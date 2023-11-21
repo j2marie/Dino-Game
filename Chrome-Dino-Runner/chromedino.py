@@ -120,7 +120,7 @@ class Dinosaur:
             self.jump_vel -= 0.8
         if self.jump_vel < -self.JUMP_VEL:
             self.dino_jump = False
-            self.jump_vel = self.JUMP_VEL
+            self.jump_vel = self.JUMP_VEL #End Of LExis Part
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
@@ -233,7 +233,7 @@ def main():
     def unpause():
         nonlocal pause, run
         pause = False
-        run = True
+        run = True #Another Part
 
     def paused():
         nonlocal pause
@@ -351,4 +351,5 @@ def menu(death_count):
 
 
 t1 = threading.Thread(target=menu(death_count=0), daemon=True)
-t1.start()
+t1.start() #another
+#Parts: 0-123, 123-236, 236-354

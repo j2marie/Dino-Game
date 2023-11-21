@@ -236,14 +236,14 @@ def main():
         run = True #Another Part
 
     def paused():
-        nonlocal pause
-        pause = True
-        font = pygame.font.Font("freesansbold.ttf", 30)
-        text = font.render("Game Paused, Press 'u' to Unpause", True, FONT_COLOR)
-        textRect = text.get_rect()
-        textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT  // 3)
-        SCREEN.blit(text, textRect)
-        pygame.display.update()
+        nonlocal pause #Refers to the variable 'pause' outside of the function. 
+        pause = True #Changes the original value of pause (False) to True
+        font = pygame.font.Font("freesansbold.ttf", 30) #Creates a new Font by grabbing it from the file 'freesansbold.ttf'. Makes the font size 30.
+        text = font.render("Game Paused, Press 'u' to Unpause", True, FONT_COLOR) #Creates an image of the font, that will then be blit to the Screen.
+        textRect = text.get_rect() #Return specified rectangular area of the text *but not area is given?
+        textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT  // 3) #Centres the image of the to width (width of screen divided by 2) and height (height of screen divided by 3).
+        SCREEN.blit(text, textRect) #Copies the text from one surface to the other surface (on the screen).
+        pygame.display.update() #Update the window
 
         while pause:
             for event in pygame.event.get():

@@ -245,21 +245,21 @@ def main():
         SCREEN.blit(text, textRect) #Copies the text from one surface to the other surface (on the screen).
         pygame.display.update() #Update the window
 
-        while pause:
-            for event in pygame.event.get():
-                if event.type == pygame.QUIT:
-                    pygame.quit()
-                    quit()
-                if event.type == pygame.KEYDOWN and event.key == pygame.K_u:
-                    unpause()
+        while pause: #starts while loop for variable 'pause'
+            for event in pygame.event.get(): #For a variable in the queue of events do the following functions.
+                if event.type == pygame.QUIT: #If the type of the variable event is equal to type pygame.QUIT do the following functions.
+                    pygame.quit() #End the application.
+                    quit() #Exit the game.
+                if event.type == pygame.KEYDOWN and event.key == pygame.K_u: #if the type of the variable event is equal to pressing down and if the user presses u do the following.
+                    unpause() #Unpause the game - go to the function unpause
 
-    while run:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-            if event.type == pygame.KEYDOWN and event.key == pygame.K_p:
-                run = False
-                paused()
+    while run: #starts while loop for variable 'run'
+        for event in pygame.event.get(): #For a variable in the queue of events do the following functions.
+            if event.type == pygame.QUIT: #If the type of the variable event is equal to pygame.Quit do the following functions.
+                run = False #Change run to False (stop the charactr from running)
+            if event.type == pygame.KEYDOWN and event.key == pygame.K_p: #If the type of the variable event is equal to pressing down and if the user presses p do the following.
+                run = False #Changes run to False (stop the character from running)
+                paused() #Pause the game - go to the function pause
 
         current_time = datetime.datetime.now().hour
         if 7 < current_time < 19:
@@ -271,16 +271,16 @@ def main():
         player.draw(SCREEN)
         player.update(userInput)
 
-        if len(obstacles) == 0:
-            if random.randint(0, 2) == 0:
-                obstacles.append(SmallCactus(SMALL_CACTUS))
-            elif random.randint(0, 2) == 1:
-                obstacles.append(LargeCactus(LARGE_CACTUS))
-            elif random.randint(0, 2) == 2:
-                obstacles.append(Bird(BIRD))
+        if len(obstacles) == 0: #if the length of the variable obstacles is equal to 0, do the following:
+            if random.randint(0, 2) == 0: #If the random integerbetween 0 to 2 is equal to 0, do the following:
+                obstacles.append(SmallCactus(SMALL_CACTUS)) #Input a small cactus as an obstacle
+            elif random.randint(0, 2) == 1: #If the statement above is not fulfilled and if the randon integer between 0 to 2 is equal to 1, do the following:
+                obstacles.append(LargeCactus(LARGE_CACTUS)) #Input a large cactus as an obstacle
+            elif random.randint(0, 2) == 2: #If the statements above are not fulfilled and if the random integer between 0 to 2 is equal to 2, do the following:
+                obstacles.append(Bird(BIRD)) #Inupt a bird as an obstacle
 
-        for obstacle in obstacles:
-            obstacle.draw(SCREEN)
+        for obstacle in obstacles: #A for loop for the variable obstacles
+            obstacle.draw(SCREEN) 
             obstacle.update()
             if player.dino_rect.colliderect(obstacle.rect):
                 pygame.time.delay(2000)
@@ -298,12 +298,12 @@ def main():
         pygame.display.update()
 
 
-def menu(death_count):
-    global points
-    global FONT_COLOR
-    run = True
-    while run:
-        current_time = datetime.datetime.now().hour
+def menu(death_count): #Defines a new function 'menu' with the variable death_count
+    global points #Look for the variable 'points' from the whole code
+    global FONT_COLOR #Look for the variable 'Font_color' from the whole code
+    run = True #Change run to True
+    while run: #Start while loop for variable run
+        current_time = datetime.datetime.now().hour 
         if 7 < current_time < 19:
             FONT_COLOR=(0,0,0)
             SCREEN.fill((255, 255, 255))
@@ -312,8 +312,8 @@ def menu(death_count):
             SCREEN.fill((128, 128, 128))
         font = pygame.font.Font("freesansbold.ttf", 30)
 
-        if death_count == 0:
-            text = font.render("Press any Key to Start", True, FONT_COLOR)
+        if death_count == 0: #if the death count is equal to 0, do the following:
+            text = font.render("Press any Key to Start", True, FONT_COLOR) #Create an image of the font
         elif death_count > 0:
             text = font.render("Press any Key to Restart", True, FONT_COLOR)
             score = font.render("Your Score: " + str(points), True, FONT_COLOR)

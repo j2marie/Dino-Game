@@ -237,7 +237,7 @@ def main(): #define our main function where the functions and classes defined ab
         run = True #Another Part
 
     def paused():
-                nonlocal pause #Refers to the variable 'pause' outside of the function. 
+        nonlocal pause #Refers to the variable 'pause' outside of the function. 
         pause = True #Changes the original value of pause (False) to True
         font = pygame.font.Font("freesansbold.ttf", 30) #Creates a new Font by grabbing it from the file 'freesansbold.ttf'. Makes the font size 30.
         text = font.render("Game Paused, Press 'u' to Unpause", True, FONT_COLOR) #Creates an image of the font, that will then be blit to the Screen.

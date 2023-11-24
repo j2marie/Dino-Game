@@ -236,13 +236,14 @@ def main(): #Create a function "main" where the functions and classes defined ab
         pause = False #set the variable "pause" equal to false
         run = True #set the variable "run" equal to True (so the game will run)
     
-    #Another Part
+    
+    #Joy-Marie Salama's Part Starts
 
     def paused():
         nonlocal pause #Refers to the variable 'pause' outside of the function. 
         pause = True #Changes the original value of pause (False) to True
         font = pygame.font.Font("freesansbold.ttf", 30) #Creates a new Font by grabbing it from the file 'freesansbold.ttf'. Makes the font size 30.
-        text = font.render("Game Paused, Press 'u' to Unpause", True, FONT_COLOR) #Creates an image of the font, that will then be blit to the Screen.
+        text = font.render("Game Paused, Press 'u' to Unpause", True, FONT_COLOR) #Creates an image of the font (Game Paused, Press 'u' to Unpause), that will then be blit to the Screen.
         textRect = text.get_rect() #Return specified rectangular area of the text *but not area is given?
         textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT  // 3) #Centres the image of the to width (width of screen divided by 2) and height (height of screen divided by 3).
         SCREEN.blit(text, textRect) #Copies the text from one surface to the other surface (on the screen).
@@ -256,23 +257,23 @@ def main(): #Create a function "main" where the functions and classes defined ab
                 if event.type == pygame.KEYDOWN and event.key == pygame.K_u: #if the type of the variable event is equal to pressing down and if the user presses u do the following.
                     unpause() #Unpause the game - go to the function unpause
 
-    while run: #starts while loop for variable 'run'
+    while run: #starts while loop for the function run
         for event in pygame.event.get(): #For a variable in the queue of events do the following functions.
             if event.type == pygame.QUIT: #If the type of the variable event is equal to pygame.Quit do the following functions.
-                run = False #Change run to False (stop the charactr from running)
+                run = False #Change run to False (stop the character from running)
             if event.type == pygame.KEYDOWN and event.key == pygame.K_p: #If the type of the variable event is equal to pressing down and if the user presses p do the following.
                 run = False #Changes run to False (stop the character from running)
                 paused() #Pause the game - go to the function pause
 
-        current_time = datetime.datetime.now().hour
-        if 7 < current_time < 19:
-            SCREEN.fill((255, 255, 255))
-        else:
-            SCREEN.fill((0, 0, 0))
-        userInput = pygame.key.get_pressed()
+        current_time = datetime.datetime.now().hour #sets the time to the current hour
+        if 7 < current_time < 19: #if the time is between 7 to 19, then do the following:
+            SCREEN.fill((255, 255, 255)) #Change the screen to the colour white
+        else: #if the time is not between 7 to 19, then do the following:
+            SCREEN.fill((0, 0, 0)) #Change the screen to the colour black
+        userInput = pygame.key.get_pressed() #Returns the state of the key to 1 if it gets pressed, or else it will stay 0
 
-        player.draw(SCREEN)
-        player.update(userInput)
+        player.draw(SCREEN) #Draws the dinosaur ontop of the new screen???
+        player.update(userInput) #Check what the user input is, and it will update the player's actions because of it.
 
         if len(obstacles) == 0: #if the length of the variable obstacles is equal to 0, do the following:
             if random.randint(0, 2) == 0: #If the random integerbetween 0 to 2 is equal to 0, do the following:
@@ -283,76 +284,76 @@ def main(): #Create a function "main" where the functions and classes defined ab
                 obstacles.append(Bird(BIRD)) #Inupt a bird as an obstacle
 
         for obstacle in obstacles: #A for loop for the variable obstacles
-            obstacle.draw(SCREEN) 
-            obstacle.update()
-            if player.dino_rect.colliderect(obstacle.rect):
-                pygame.time.delay(2000)
-                death_count += 1
-                menu(death_count)
+            obstacle.draw(SCREEN)  #Draws the new obstacle ontop of the new screen ???
+            obstacle.update() #Checks what the obstacle is, and updates the obstacle shown ???
+            if player.dino_rect.colliderect(obstacle.rect): # If the dinosaur collides with the obstacles, do the following:
+                pygame.time.delay(2000) #Pause the game for 2 seconds
+                death_count += 1 #Increase the death count by 1
+                menu(death_count) # Create a menu with the number of death counts ??? - I don't know what this does ????
 
-        background() 
+        background() #For the function background
 
-        cloud.draw(SCREEN) 
-        cloud.update() 
+        cloud.draw(SCREEN) #Draw the cloud image onto the screen
+        cloud.update() #update the cloud
 
-        score() 
+        score()  #For the function score
 
-        clock.tick(30)
-        pygame.display.update()
+        clock.tick(30) #Tells the game to run no more than 30 frames per second.
+        pygame.display.update() #update the display
 
 
-def menu(death_count): #Defines a new function 'menu' with the variable death_count
+def menu(death_count): #Defines a function 'menu' with the variable death_count
     global points #Look for the variable 'points' from the whole code
     global FONT_COLOR #Look for the variable 'Font_color' from the whole code
     run = True #Change run to True
     while run: #Start while loop for variable run
-        current_time = datetime.datetime.now().hour 
-        if 7 < current_time < 19:
-            FONT_COLOR=(0,0,0)
-            SCREEN.fill((255, 255, 255))
-        else:
-            FONT_COLOR=(255,255,255)
-            SCREEN.fill((128, 128, 128))
-        font = pygame.font.Font("freesansbold.ttf", 30)
+        current_time = datetime.datetime.now().hour #Set the variable 'current_time' to the current tmie in real life
+        if 7 < current_time < 19: #if the current time is between 7 to 19, do the following:
+            FONT_COLOR=(0,0,0) #Change the font colour to black
+            SCREEN.fill((255, 255, 255)) #The screen will be white
+        else: #or else (not between 7 to 19)
+            FONT_COLOR=(255,255,255) #Change the font colour to white
+            SCREEN.fill((128, 128, 128)) #Change the background to grey
+        font = pygame.font.Font("freesansbold.ttf", 30) #Make the font of the game size 30 in freesansbold font
 
         if death_count == 0: #if the death count is equal to 0, do the following:
-            text = font.render("Press any Key to Start", True, FONT_COLOR) #Create an image of the font
-        elif death_count > 0:
-            text = font.render("Press any Key to Restart", True, FONT_COLOR)
-            score = font.render("Your Score: " + str(points), True, FONT_COLOR)
-            scoreRect = score.get_rect()
-            scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
-            SCREEN.blit(score, scoreRect)
-            f = open("score.txt", "a")
-            f.write(str(points) + "\n")
-            f.close()
-            with open("score.txt", "r") as f:
+            text = font.render("Press any Key to Start", True, FONT_COLOR) #Create an image of the font (Press any Key to Start) in the Font described above
+        elif death_count > 0: #if the death count is greater than 0, do the following:
+            text = font.render("Press any Key to Restart", True, FONT_COLOR) #Create an image of the font (Press any Key to Restart) in the Font described above
+            score = font.render("Your Score: " + str(points), True, FONT_COLOR) #Create an image of the words  - Your score - with the string of the points calculated from the game
+            scoreRect = score.get_rect() #Returns the image of the rectangle (but no area given???)
+            scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50 #Centre the rectangle by the width of the screen divided by 2 and the height of the screen divided by 2 and add 50.
+            SCREEN.blit(score, scoreRect) #Copies the score and the rectange onto the screen
+            f = open("score.txt", "a") #Open and create the file score.text and return it as a file object
+            f.write(str(points) + "\n") #Write the points (as a string) into the file and put in new line after it
+            f.close() # Close the file score.txt
+            with open("score.txt", "r") as f: #Opens the file score.txt to read it, and after this function is finished, it automatically closes the file.
                 score = (
                     f.read()
-                )  # Read all file in case values are not on a single line
+                )  # Read all file in case values are not on a single line and returns it as a strin
                 score_ints = [int(x) for x in score.split()]  # Convert strings to ints
-            highscore = max(score_ints)  # sum all elements of the list
+            highscore = max(score_ints)  # sum all elements of the list. Find the highest value in score_ints.
             hs_score_text = font.render(
                 "High Score : " + str(highscore), True, FONT_COLOR
-            )
-            hs_score_rect = hs_score_text.get_rect()
-            hs_score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100)
-            SCREEN.blit(hs_score_text, hs_score_rect)
-        textRect = text.get_rect()
-        textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2)
-        SCREEN.blit(text, textRect)
-        SCREEN.blit(RUNNING[0], (SCREEN_WIDTH // 2 - 20, SCREEN_HEIGHT // 2 - 140))
-        pygame.display.update()
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                run = False
-                pygame.display.quit()
-                pygame.quit()
-                exit()
-            if event.type == pygame.KEYDOWN:
-                main()
+            ) #Create an image of the text: High Score :, with the string of the integer number from the variable highscore.
+            hs_score_rect = hs_score_text.get_rect() #Put the text into a rectangle. 
+            hs_score_rect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 100) #Centre the rectangle with the width half the screen width and the height half the screen height + 100.
+            SCREEN.blit(hs_score_text, hs_score_rect) #Bring the hs_score_text and hs_score_rect to the Screen.
+        textRect = text.get_rect() #create a rectangle for the text
+        textRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2) #Centre the rectangle with width half the screen width and height half the screen height.
+        SCREEN.blit(text, textRect) #Bring the text and textRect to the Screen.
+        SCREEN.blit(RUNNING[0], (SCREEN_WIDTH // 2 - 20, SCREEN_HEIGHT // 2 - 140)) #Bring the running image (index 0) with width half screen width - 20 and height half screen height - 150 to the Screen ???
+        pygame.display.update() #update the Screen
+        for event in pygame.event.get(): #For a variable in the queue of events do the following functions.
+            if event.type == pygame.QUIT: #if the type of the event is equal to pygame.Quit, then do the following function.
+                run = False #Change the value run to False (stop the character from running)
+                pygame.display.quit() #Exit the display
+                pygame.quit() #exit the game
+                exit() #Do the function exit
+            if event.type == pygame.KEYDOWN: #if the type of the event is equal to pressing the down key, then do the following function.
+                main() #Return to main
 
 
-t1 = threading.Thread(target=menu(death_count=0), daemon=True)
-t1.start() #another
+t1 = threading.Thread(target=menu(death_count=0), daemon=True) #Return the death count to 0, allow the program to exit
+t1.start() #Start the thread
 #Parts: 0-123, 123-236, 236-354

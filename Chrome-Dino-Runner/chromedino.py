@@ -122,8 +122,8 @@ class Dinosaur:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL #End Of LExis Part
 
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
+    def draw(self, SCREEN): # create a function to draw the player onto the screen
+        SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y)) # blit the image of the player onto the screen at the coordinates (self.dino_rect.x, self.dino_rect.y)
 
 #Katie Leung's Part:
 
@@ -144,97 +144,99 @@ class Cloud: # creates a class for the clouds that move in the background
         SCREEN.blit(self.image, (self.x, self.y)) # blits the image of the clouds at the coordinates of (self.x, self.y) onto the screen
 
 
-class Obstacle: # create a class named "Obstacle" for the cactus and birds that the player must avoid???
-    def __init__(self, image, type):
-        self.image = image
-        self.type = type
-        self.rect = self.image[self.type].get_rect()
-        self.rect.x = SCREEN_WIDTH
+class Obstacle: # create a class named "Obstacle" for the cacti and birds that the player must avoid
+    def __init__(self, image, type): # create a intializing function with self, image, and type as its parameters
+        self.image = image # assign the "image" parameter to the attribute "image"
+        self.type = type # assign the "image" parameter to the attribute "image"
+        self.rect = self.image[self.type].get_rect() # get the dimensions (coordinates) of the image
+        self.rect.x = SCREEN_WIDTH # set the inital x coordinate of the obstacle to be the screen width (just off the right side of the screen)
 
-    def update(self):
-        self.rect.x -= game_speed
-        if self.rect.x < -self.rect.width:
-            obstacles.pop()
+    def update(self): # create a function to update the state of the obstacle
+        self.rect.x -= game_speed # move the obstacle to the left by subtracting the game_speed from the x coordinate
+        if self.rect.x < -self.rect.width: # if the obstacle moves completely off screen, do the following:
+            obstacles.pop() # remove the obstacle
 
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image[self.type], self.rect)
-
-
-class SmallCactus(Obstacle):
-    def __init__(self, image):
-        self.type = random.randint(0, 2)
-        super().__init__(image, self.type)
-        self.rect.y = 325
+    def draw(self, SCREEN): # create a function to draw the obstacle onto the screen
+        SCREEN.blit(self.image[self.type], self.rect) # blit the image of the obstacle onto the screen
 
 
-class LargeCactus(Obstacle):
-    def __init__(self, image):
-        self.type = random.randint(0, 2)
-        super().__init__(image, self.type)
-        self.rect.y = 300
+class SmallCactus(Obstacle): # create a subclass of Obstacle named SmallCactus
+    def __init__(self, image): # initalizes the small cactus object
+        self.type = random.randint(0, 2) # set the type to be a random integer from 0 to 2 to get one of the 3 possible small cacti
+        super().__init__(image, self.type) # intialize the __init__ method of the parent class, Obstacle
+        self.rect.y = 325 #set the y coordinate of the small cactus to 325
 
 
-class Bird(Obstacle):
-    BIRD_HEIGHTS = [250, 290, 320]
-
-    def __init__(self, image):
-        self.type = 0
-        super().__init__(image, self.type)
-        self.rect.y = random.choice(self.BIRD_HEIGHTS)
-        self.index = 0
-
-    def draw(self, SCREEN):
-        if self.index >= 9:
-            self.index = 0
-        SCREEN.blit(self.image[self.index // 5], self.rect)
-        self.index += 1
+class LargeCactus(Obstacle): # create a subclass of Obstacle named LargeCactus
+    def __init__(self, image): # initalizes the large cactus object
+        self.type = random.randint(0, 2) # set the type to be a random integer from 0 to 2 to get one of the 3 possible large cacti
+        super().__init__(image, self.type) # intialize the __init__ method of the parent class, Obstacle
+        self.rect.y = 300 # set the y coordinate of the large cactus to 300
 
 
-def main(): #define our main function where the functions and classes defined above will be called
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles #creates a bunch of global variables
-    run = True # sets run equal to true, while the variable is true, the game runs
-    clock = pygame.time.Clock() # creates an object to track the time
-    player = Dinosaur() # creates an instance of the class Dinosaur()
-    cloud = Cloud() # creates an instance of the class Cloud()
+class Bird(Obstacle): # create a subclass of Obstacle named Bird
+    BIRD_HEIGHTS = [250, 290, 320] # make a list of possible bird heights and assign it to the variable BIRD_HEIGHTS
+
+    def __init__(self, image): # initalizes the bird object
+        self.type = 0 # set the type to zero since there is only one type of bird
+        super().__init__(image, self.type) # intialize the __init__ method of the parent class, Obstacle
+        self.rect.y = random.choice(self.BIRD_HEIGHTS) #set the y coordinate of the bird to be one of the 3 possibilities within the list BIRD_HEIGHTS
+        self.index = 0 # set the inital index to be zero
+
+    def draw(self, SCREEN): # create a new draw function that overrides the one in the parent class, Obstacle, since the bird is animated
+        if self.index >= 9: # if the index reaches a value of 9, do the following: 
+            self.index = 0 # reset the index to be zero
+        SCREEN.blit(self.image[self.index // 5], self.rect) # blit the bird onto the screen, such that when the index is between 0-4, the first image will be drawn while 5-9, the 2nd image is drawn
+        self.index += 1 # increment the index by one
+
+
+def main(): #Create a function "main" where the functions and classes defined above will be called
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles # the variables listed here are defined as global variables, meaning they can be accessed and changed througout the entire program
+    run = True # Set run equal to true. While the variable is true, the game runs
+    clock = pygame.time.Clock() # creates an object to track the time and assigns it to the variable clock
+    player = Dinosaur() # creates an instance of the class Dinosaur and assigns it to the variable player
+    cloud = Cloud() # creates an instance of the class Cloud and assigns it to the variable cloud
     game_speed = 20 # sets the inital game speed to be 20 (the background, clouds, and obstacles are dependent on the game speed)
-    x_pos_bg = 0 # sets the x coordinate of the background to be 0 (leftmost side)
-    y_pos_bg = 380 # sets the y coordinate of the background to be 380, the height at which the dinosaur will be running on
+    x_pos_bg = 0 # sets the intial x coordinate of the background to be 0 
+    y_pos_bg = 380 # sets the inital y coordinate of the background to be 380 (where the dinosaur will be running on)
     points = 0 # sets the inital value of points to be 0
-    font = pygame.font.Font("freesansbold.ttf", 20) #define the font to be "freesansbold.ttf" at size 20
+    font = pygame.font.Font("freesansbold.ttf", 20) #create a font from the file "freesansbold.ttf" and set it to size 20 
     obstacles = [] #creates an empty list for the obstacles
     death_count = 0 # sets the death counter to start at 0
     pause = False #set pause equal to false (since the game is running)
 
-    def score(): # create a function named score()
-        global points, game_speed # add the global variables "points" and "game_speed"
-        points += 1 # every time the score function is called, increase the number of points the player had by 1
+    def score(): # create a function named score
+        global points, game_speed # use the global variables "points" and "game_speed" (definied in main() )
+        points += 1 # every time the score function is called, increase the number of points the player has by 1
         if points % 100 == 0: # every 100 points, the game speed increases by 1, increasing the difficulty of the game
-            game_speed += 1
-        current_time = datetime.datetime.now().hour
-        with open("score.txt", "r") as f:
-            score_ints = [int(x) for x in f.read().split()]  
-            highscore = max(score_ints)
-            if points > highscore:
-                highscore=points 
-            text = font.render("High Score: "+ str(highscore) + "  Points: " + str(points), True, FONT_COLOR) # display the text of the player's high score and points on the screen in the font colour, black
-        textRect = text.get_rect() # get the coords of the rectangle in which the highscore and points are displayed
+            game_speed += 1 # increase the game speed by 1
+        current_time = datetime.datetime.now().hour # get the current hour in the datetime module
+        with open("score.txt", "r") as f: # open the score.txt file ??????/ what is with??
+            score_ints = [int(x) for x in f.read().split()] # read "score.txt" and split it into a list of strings, then convert the strings into integers for all the items in the file
+            highscore = max(score_ints) # find the highest value of the scores to find the current highscore
+            if points > highscore: #if the player's current points are higher than the highscore, do the following:
+                highscore = points # set the new highscore to be the player's current score
+            text = font.render("High Score: "+ str(highscore) + "  Points: " + str(points), True, FONT_COLOR) # display the text of the player's high score and points on the screen in the font colour black 
+        textRect = text.get_rect() # get the coordinates of the rectangle in which the highscore and points are displayed
         textRect.center = (900, 40) # set the centre of the text to the top right corner of the screen
         SCREEN.blit(text, textRect) # blit the highscore and points onto the screen
 
-    def background():
-        global x_pos_bg, y_pos_bg # get the global x and y coordinates of the background
+    def background(): # create a function called background
+        global x_pos_bg, y_pos_bg # get the global x and y coordinates of the background 
         image_width = BG.get_width() # get the dimensions of the background image
         SCREEN.blit(BG, (x_pos_bg, y_pos_bg)) # blit the background image onto the screen at the global x and y coordinates
-        SCREEN.blit(BG, (image_width + x_pos_bg, y_pos_bg)) # blit another background image onto the screen with a different x position
+        SCREEN.blit(BG, (image_width + x_pos_bg, y_pos_bg)) # blit another background image onto the screen to the right of the first one to make it seem like a continous track
         if x_pos_bg <= -image_width: # if the background image moves fully off the screen, a new background image is created to replace it
             SCREEN.blit(BG, (image_width + x_pos_bg, y_pos_bg)) # blit the replacement background image onto the screen
-            x_pos_bg = 0 # set the x position of the background to be 0 WHY???
+            x_pos_bg = 0 # reset the x position of the background back to 0 
         x_pos_bg -= game_speed # move the background image to the left based on the game speed
 
-    def unpause():
-        nonlocal pause, run
-        pause = False
-        run = True #Another Part
+    def unpause(): # create a function called unpause
+        nonlocal pause, run # uses the variables "pause" and "run" that are defined in main(), its parent class 
+        pause = False #set the variable "pause" equal to false
+        run = True #set the variable "run" equal to True (so the game will run)
+    
+    #Another Part
 
     def paused():
         nonlocal pause #Refers to the variable 'pause' outside of the function. 

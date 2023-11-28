@@ -276,7 +276,7 @@ def main(): #Create a function "main" where the functions and classes defined ab
         player.update(userInput) #Check what the user input is, and it will update the player's actions because of it.
 
         if len(obstacles) == 0: #if the length of the variable obstacles is equal to 0, do the following:
-            if random.randint(0, 2) == 0: #If the random integerbetween 0 to 2 is equal to 0, do the following:
+            if random.randint(0, 2) == 0: #If the random integer between 0 to 2 is equal to 0, do the following:
                 obstacles.append(SmallCactus(SMALL_CACTUS)) #Input a small cactus as an obstacle
             elif random.randint(0, 2) == 1: #If the statement above is not fulfilled and if the randon integer between 0 to 2 is equal to 1, do the following:
                 obstacles.append(LargeCactus(LARGE_CACTUS)) #Input a large cactus as an obstacle
@@ -324,7 +324,7 @@ def menu(death_count): #Defines a function 'menu' with the variable death_count
             scoreRect = score.get_rect() #Returns the image of the rectangle (but no area given???)
             scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50) #Centre the rectangle by the width of the screen divided by 2 and the height of the screen divided by 2 and add 50.
             SCREEN.blit(score, scoreRect) #Copies the score and the rectange onto the screen
-            f = open("score.txt", "a") #Open and create the file score.text and return it as a file object
+            f = open("score.txt", "a") #Open and create the file score.txt and return it as a file object
             f.write(str(points) + "\n") #Write the points (as a string) into the file and put in new line after it
             f.close() # Close the file score.txt
             with open("score.txt", "r") as f: #Opens the file score.txt to read it, and after this function is finished, it automatically closes the file.

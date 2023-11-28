@@ -322,7 +322,7 @@ def menu(death_count): #Defines a function 'menu' with the variable death_count
             text = font.render("Press any Key to Restart", True, FONT_COLOR) #Create an image of the font (Press any Key to Restart) in the Font described above
             score = font.render("Your Score: " + str(points), True, FONT_COLOR) #Create an image of the words  - Your score - with the string of the points calculated from the game
             scoreRect = score.get_rect() #Returns the image of the rectangle (but no area given???)
-            scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50 #Centre the rectangle by the width of the screen divided by 2 and the height of the screen divided by 2 and add 50.
+            scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50) #Centre the rectangle by the width of the screen divided by 2 and the height of the screen divided by 2 and add 50.
             SCREEN.blit(score, scoreRect) #Copies the score and the rectange onto the screen
             f = open("score.txt", "a") #Open and create the file score.text and return it as a file object
             f.write(str(points) + "\n") #Write the points (as a string) into the file and put in new line after it

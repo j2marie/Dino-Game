@@ -357,3 +357,4 @@ def menu(death_count): #Defines a function 'menu' with the variable death_count
 t1 = threading.Thread(target=menu(death_count=0), daemon=True) #Return the death count to 0, allow the program to exit
 t1.start() #Start the thread
 #Parts: 0-123, 123-236, 236-354
+

@@ -276,7 +276,7 @@ def main(): #Create a function "main" where the functions and classes defined ab
         player.update(userInput) #Check what the user input is, and it will update the player's actions because of it.
 
         if len(obstacles) == 0: #if the length of the variable obstacles is equal to 0, do the following:
-            if random.randint(0, 2) == 0: #If the random integerbetween 0 to 2 is equal to 0, do the following:
+            if random.randint(0, 2) == 0: #If the random integer between 0 to 2 is equal to 0, do the following:
                 obstacles.append(SmallCactus(SMALL_CACTUS)) #Input a small cactus as an obstacle
             elif random.randint(0, 2) == 1: #If the statement above is not fulfilled and if the randon integer between 0 to 2 is equal to 1, do the following:
                 obstacles.append(LargeCactus(LARGE_CACTUS)) #Input a large cactus as an obstacle

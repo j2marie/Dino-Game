@@ -48,6 +48,9 @@ BIRD = [
 
 CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
 
+LASER = pygame.image.load(os.path.join("assets/Power", "circle.png"))
+LASER1 = pygame.transform.scale(LASER, (50,50))
+
 BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
 
 FONT_COLOR=(0,0,0)
@@ -143,6 +146,20 @@ class Cloud:
         SCREEN.blit(self.image, (self.x, self.y))
 
 
+slow = pygame.USEREVENT + 1
+class Laser:
+    def __init__(self, image):
+        self.image = LASER1
+        self.rect = pygame.Rect(75, 75, 75, 75)
+        self.rect.x = SCREEN_WIDTH
+        self.rect.y = 250
+    def update(self):
+        self.rect.x -= game_speed
+        if self.rect.x < -15 * self.rect.width:
+            lasers.pop()
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y))
+
 class Obstacle:
     def __init__(self, image, type):
         self.image = image
@@ -190,7 +207,7 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, lasers
     run = True
     clock = pygame.time.Clock()
     player = Dinosaur()
@@ -201,6 +218,7 @@ def main():
     points = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     obstacles = []
+    lasers = []
     death_count = 0
     pause = False
 
@@ -286,11 +304,21 @@ def main():
                 pygame.time.delay(2000)
                 death_count += 1
                 menu(death_count)
+        if len(lasers) == 0:
+            lasers.append(Laser(LASER1))
+        for laser in lasers:
+            laser.draw(SCREEN)
+            laser.update()
+            if player.dino_rect.colliderect(laser.rect):
+                if event.type == pygame.KEYDOWN:
+                    if event.key == pygame.K_s:
+                        game_speed -=30
 
         background()
 
         cloud.draw(SCREEN)
         cloud.update()
+
 
         score()
 

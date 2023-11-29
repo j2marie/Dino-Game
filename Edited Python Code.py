@@ -50,6 +50,9 @@ CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
 
 BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
 
+INVINCIBILITY = pygame.image.load("assets/Invincibility.png")
+INVINCIBILITY = pygame.transform.scale(INVINCIBILITY, (25,25))
+
 FONT_COLOR=(0,0,0)
 
 class Dinosaur:
@@ -74,6 +77,8 @@ class Dinosaur:
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
+
+        self.invincible = False #new attribute for the player
 
     def update(self, userInput):
         if self.dino_duck:
@@ -122,9 +127,30 @@ class Dinosaur:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
 
+    def invincible(self):
+        self.invincible = True
+        pygame.time.set_timer(pygame.USEREVENT + 1, 5000)
+        #ignore collisions phase through obstacles until timer ends
+
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
+class Invincibility:
+    def __init__(self, image):
+        self.x = SCREEN_WIDTH + random.randint(800, 1000)
+        self.y = 225
+        self.image = INVINCIBILITY 
+        self.rect = pygame.Rect(25, 25, 25, 25)
+        self.width = self.image.get_width()
+
+    def update(self):
+        self.x -= game_speed
+        if self.x < -self.width:
+            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
+            self.y = 225
+
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image, (self.x, self.y))
 
 class Cloud:
     def __init__(self):
@@ -190,7 +216,7 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible
     run = True
     clock = pygame.time.Clock()
     player = Dinosaur()
@@ -202,6 +228,7 @@ def main():
     font = pygame.font.Font("freesansbold.ttf", 20)
     obstacles = []
     death_count = 0
+    invincible = []
     pause = False
 
     def score():
@@ -278,6 +305,15 @@ def main():
                 obstacles.append(LargeCactus(LARGE_CACTUS))
             elif random.randint(0, 2) == 2:
                 obstacles.append(Bird(BIRD))
+
+        if len(invincible) == 0:
+            invincible.append(Invincibility(INVINCIBILITY))
+        for i in invincible:
+            i.draw(SCREEN)
+            i.update()
+            if player.dino_rect.colliderect(i.rect):
+                invincible.pop()
+
 
         for obstacle in obstacles:
             obstacle.draw(SCREEN)

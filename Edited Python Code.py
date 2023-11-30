@@ -4,6 +4,7 @@ import datetime
 import os
 import random
 import threading
+import numpy
 
 import pygame
 
@@ -48,8 +49,15 @@ BIRD = [
 
 CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
 
-LASER = pygame.image.load(os.path.join("assets/Power", "circle.png"))
-LASER1 = pygame.transform.scale(LASER, (50,50))
+POWER = pygame.image.load(os.path.join("assets/Power", "circle.png")) #Added image of the circle power-up
+POWER1 = pygame.transform.scale(POWER, (50,50)) #resized the circle
+
+LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png"))
+LASER2 = pygame.image.load(os.path.join("assets/Power", "dino_laser2.png")) #Added image of the laser
+RLASER1 = pygame.transform.scale(LASER1, (300,200))
+RLASER2 = pygame.transform.scale(LASER1, (300,200))
+LASER = [RLASER1, RLASER2]
+
 
 BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
 
@@ -66,10 +74,13 @@ class Dinosaur:
         self.duck_img = DUCKING
         self.run_img = RUNNING
         self.jump_img = JUMPING
+        self.laser_img = LASER #made variable for the laser
 
         self.dino_duck = False
         self.dino_run = True
         self.dino_jump = False
+        self.dino_laser = False #added new initial start for power-up
+        self.dino_collided = 0
 
         self.step_index = 0
         self.jump_vel = self.JUMP_VEL
@@ -85,6 +96,8 @@ class Dinosaur:
             self.run()
         if self.dino_jump:
             self.jump()
+        if self.dino_laser:
+            self.laser()
 
         if self.step_index >= 10:
             self.step_index = 0
@@ -93,14 +106,31 @@ class Dinosaur:
             self.dino_duck = False
             self.dino_run = False
             self.dino_jump = True
+            self.dino_laser = False
         elif userInput[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
             self.dino_run = False
             self.dino_jump = False
+            self.dino_laser = False
+        elif userInput[pygame.K_RIGHT] and not self.dino_jump:
+            if self.dino_collided > 0:
+                self.dino_duck = False
+                self.dino_run = False
+                self.dino_jump = False
+                self.dino_laser = True
+                self.dino_collided -= 1 
+            else:
+                self.dino_duck = False
+                self.dino_run = True
+                self.dino_jump = False
+                self.dino_laser = False
+            
         elif not (self.dino_jump or userInput[pygame.K_DOWN]):
             self.dino_duck = False
             self.dino_run = True
             self.dino_jump = False
+            self.dino_laser = False
+        
 
     def duck(self):
         self.image = self.duck_img[self.step_index // 5]
@@ -124,9 +154,17 @@ class Dinosaur:
         if self.jump_vel < -self.JUMP_VEL:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
+    
+    def laser(self):
+        self.image = self.laser_img[self.step_index // 5]
+        self.dino_rect = self.image.get_rect()
+        self.dino_rect.x = self.X_POS + 25
+        self.dino_rect.y = self.Y_POS - 50
+        self.step_index += 1
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
+
 
 
 class Cloud:
@@ -146,19 +184,18 @@ class Cloud:
         SCREEN.blit(self.image, (self.x, self.y))
 
 
-slow = pygame.USEREVENT + 1
-class Laser:
+class Power: #new class for powerup
     def __init__(self, image):
-        self.image = LASER1
-        self.rect = pygame.Rect(75, 75, 75, 75)
-        self.rect.x = SCREEN_WIDTH
-        self.rect.y = 250
+        self.image = POWER1 #get image of POWER1
+        self.rect = pygame.Rect(75, 75, 75, 75) #make a square 75x75
+        self.rect.x = SCREEN_WIDTH + random.randint(800,1000) #randomize how long the width is
+        self.rect.y = 215 #keep at certain height
     def update(self):
-        self.rect.x -= game_speed
-        if self.rect.x < -15 * self.rect.width:
-            lasers.pop()
+        self.rect.x -= game_speed #subtract the width from the game_speed
+        if self.rect.x < -self.rect.width: #if the width is smaller than the -width
+            powers.pop() #make it disappear
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.rect.x, self.rect.y))
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) #bring it to the surface
 
 class Obstacle:
     def __init__(self, image, type):
@@ -207,7 +244,7 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, lasers
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, powers
     run = True
     clock = pygame.time.Clock()
     player = Dinosaur()
@@ -218,7 +255,7 @@ def main():
     points = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     obstacles = []
-    lasers = []
+    powers = []
     death_count = 0
     pause = False
 
@@ -300,20 +337,22 @@ def main():
         for obstacle in obstacles:
             obstacle.draw(SCREEN)
             obstacle.update()
+            if player.dino_collided == 6:
+                obstacles.pop()
             if player.dino_rect.colliderect(obstacle.rect):
                 pygame.time.delay(2000)
                 death_count += 1
                 menu(death_count)
-        if len(lasers) == 0:
-            lasers.append(Laser(LASER1))
-        for laser in lasers:
-            laser.draw(SCREEN)
-            laser.update()
-            if player.dino_rect.colliderect(laser.rect):
-                if event.type == pygame.KEYDOWN:
-                    if event.key == pygame.K_s:
-                        game_speed -=30
-
+        
+        if len(powers) == 0:
+            powers.append(Power(POWER1))
+        for power in powers:
+            power.draw(SCREEN)
+            power.update()
+            if player.dino_rect.colliderect(power.rect):
+                powers.pop()
+                player.dino_collided = 7
+                
         background()
 
         cloud.draw(SCREEN)

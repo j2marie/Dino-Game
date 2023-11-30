@@ -143,7 +143,6 @@ class Cloud: # creates a class for the clouds that move in the background
     def draw(self, SCREEN): # create a function to draw the clouds onto the screen
         SCREEN.blit(self.image, (self.x, self.y)) # blits the image of the clouds at the coordinates of (self.x, self.y) onto the screen
 
-
 class Obstacle: # create a class named "Obstacle" for the cacti and birds that the player must avoid
     def __init__(self, image, type): # create a intializing function with self, image, and type as its parameters
         self.image = image # assign the "image" parameter to the attribute "image"

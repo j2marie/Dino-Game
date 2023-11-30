@@ -41,6 +41,8 @@ LARGE_CACTUS = [
     pygame.image.load(os.path.join("assets/Cactus", "LargeCactus3.png")),
 ]
 
+COIN = pygame.image.load(os.path.join("assets/Coins", "coin_00.png"))
+
 BIRD = [
     pygame.image.load(os.path.join("assets/Bird", "Bird1.png")),
     pygame.image.load(os.path.join("assets/Bird", "Bird2.png")),
@@ -57,6 +59,7 @@ INVINCIBILITY = pygame.image.load("assets/Invincibility.png")
 INVINCIBILITY = pygame.transform.scale(INVINCIBILITY, (25,25))
 
 FONT_COLOR=(0,0,0)
+
 
 class Dinosaur:
 
@@ -171,7 +174,6 @@ class Cloud:
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.x, self.y))
 
-
 slow = pygame.USEREVENT + 1
 class Laser:
     def __init__(self, image):
@@ -185,6 +187,20 @@ class Laser:
             lasers.pop()
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.rect.x, self.rect.y))
+
+class Coin:
+    def __init__(self, image):
+        self.image = coins
+        self.rect = pygame.Rect(80,300,20,20)
+        self.x = SCREEN_WIDTH
+        self.y = 310
+    def update(self):
+        self.x -= game_speed
+        if self.x < -self.width:
+            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
+            self.y = 225
+    def draw(self, SCREEN):
+        SCREEN.blit(self.image, (self.x, self.y))
 
 class Obstacle:
     def __init__(self, image, type):
@@ -215,7 +231,6 @@ class LargeCactus(Obstacle):
         super().__init__(image, self.type)
         self.rect.y = 300
 
-
 class Bird(Obstacle):
     BIRD_HEIGHTS = [250, 290, 320]
 
@@ -233,7 +248,7 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, lasers
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, lasers, coins
     run = True
     clock = pygame.time.Clock()
     player = Dinosaur()
@@ -247,6 +262,7 @@ def main():
     lasers = []
     death_count = 0
     invincible = []
+    coins = []
     pause = False
 
     def score():
@@ -331,8 +347,6 @@ def main():
             i.update()
             if player.dino_rect.colliderect(i.rect):
                 invincible.pop()
-
-
         for obstacle in obstacles:
             obstacle.draw(SCREEN)
             obstacle.update()
@@ -349,6 +363,8 @@ def main():
                 if event.type == pygame.KEYDOWN:
                     if event.key == pygame.K_s:
                         game_speed -=30
+        for c in coins:
+            SCREEN.blit(COIN, (c[0], c[1]))
 
         background()
 

@@ -41,7 +41,11 @@ LARGE_CACTUS = [
     pygame.image.load(os.path.join("assets/Cactus", "LargeCactus3.png")),
 ]
 
-COIN = pygame.image.load(os.path.join("assets/Coins", "coin_00.png"))
+COIN = [
+pygame.image.load(os.path.join("assets/Coins", "coin_00.png")), 
+pygame.image.load(os.path.join("assets/Coins", "coin_01.png")),
+]
+COIN = pygame.transform.scale(COIN [0], (25,25)) 
 
 BIRD = [
     pygame.image.load(os.path.join("assets/Bird", "Bird1.png")),
@@ -232,31 +236,19 @@ class Power: #new class for powerup
 
 class Coin:
     def __init__(self, image):
-        self.image = coins
-        self.rect = pygame.Rect(80,300,20,20)
-        self.x = SCREEN_WIDTH
-        self.y = 310
+        self.image = COIN
+        self.rect = pygame.Rect(75,75,75,75)
+        self.rect.x = SCREEN_WIDTH + random.randint(700, 900)
+        self.rect.y = 310
     def update(self):
-        self.x -= game_speed
-        if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
-            self.y = 225
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+        self.rect.x -= game_speed
+        if self.rect.x < -self.rect.width:
+            coins.pop()
+        #if Coin.colliderect(.rect):
+           # self.y = 320
 
-class Coin:
-    def __init__(self, image):
-        self.image = coins
-        self.rect = pygame.Rect(80,300,20,20)
-        self.x = SCREEN_WIDTH
-        self.y = 310
-    def update(self):
-        self.x -= game_speed
-        if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
-            self.y = 225
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y))
 
 class Obstacle:
     def __init__(self, image, type):
@@ -304,7 +296,7 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, powers, coins
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, powers, coins, collected, reference
     run = True
     clock = pygame.time.Clock()
     player = Dinosaur()
@@ -320,7 +312,23 @@ def main():
     invincible = []
     coins = []
     pause = False
+    collected = 0
+    reference = 0
 
+    def Collected():
+        global reference, collected, coins
+        collected += 1
+        reference -= 1
+    def Collected_Screen():
+        global collected
+        with open("collected.txt", "r") as f:
+            collected_ints = [int(x) for x in f.read().split()]  
+            text = font.render("Coins: " + str(collected), True, FONT_COLOR)
+        textRect = text.get_rect()
+        textRect.center = (900, 70)
+        SCREEN.blit(text, textRect) 
+    
+        
     def score():
         global points, game_speed
         points += 1
@@ -421,15 +429,27 @@ def main():
             if player.dino_rect.colliderect(power.rect):
                 powers.pop()
                 player.dino_collided = 7
+        if len(coins) == 0:
+            coins.append(Coin(COIN))
         for c in coins:
-            SCREEN.blit(COIN, (c[0], c[1]))
+            c.draw(SCREEN)
+            c.update()
+            if player.dino_rect.colliderect(c.rect):
+                coins.pop()
+                reference = 1 
+
+        
+                
+        if reference > 0:
+            Collected()
+        
                 
         background()
 
         cloud.draw(SCREEN)
         cloud.update()
 
-
+        Collected_Screen()
         score()
 
         clock.tick(30)

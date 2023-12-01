@@ -239,7 +239,7 @@ class Coin:
         self.image = COIN
         self.rect = pygame.Rect(85,85,85,85)
         self.rect.x = SCREEN_WIDTH + random.randint(500, 900)
-        self.rect.y = 360
+        self.rect.y = 340
         for Obstacle in obstacles: 
             if self.rect.colliderect(Obstacle.rect):
                 self.rect.y = 270

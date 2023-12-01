@@ -174,10 +174,10 @@ class Dinosaur:
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
-class Invincibility:
+class Invincibility: # new class for the Invincibility powerup
     def __init__(self, image):
-        self.rect = pygame.Rect(75, 75, 75, 75) # fix later
-        self.rect.x = SCREEN_WIDTH + random.randint(800, 1000)
+        self.rect = pygame.Rect(40, 40, 40, 40)
+        self.rect.x = SCREEN_WIDTH + random.randint(100, 150) #10000 150000
         self.rect.y = 225
         self.image = INVINCIBILITY 
         self.width = self.image.get_width()
@@ -185,7 +185,6 @@ class Invincibility:
     def update(self):
         self.rect.x -= game_speed
         if self.rect.x < -self.width:
-            self.rect.x = SCREEN_WIDTH + random.randint(2500, 3000)
             invincible.pop()
 
     def draw(self, SCREEN):
@@ -327,7 +326,7 @@ def main():
 
     def Invicibility_text():
         global invincible_react
-        text = font.render("Invincibility: " + str(invincible_react), True, FONT_COLOR) # maybe do the floor division thing, make less long OR less frequent the star spawns
+        text = font.render("Invincibility: " + str(invincible_react//10), True, FONT_COLOR)
         textRect = text.get_rect()
         textRect.center = (900, 100)
         SCREEN.blit(text, textRect)
@@ -456,8 +455,11 @@ def main():
         cloud.draw(SCREEN)
         cloud.update()
 
-        Invincible_update()
-        Invicibility_text()
+        Invincible_update() #update invniciiblity 
+
+        if invincible_react > 0: # only display the timer for the invincibility powerup while it is active
+            Invicibility_text()
+
         Collected_Screen()
         score()
 

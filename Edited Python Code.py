@@ -45,7 +45,7 @@ COIN = [
 pygame.image.load(os.path.join("assets/Coins", "coin_00.png")), 
 pygame.image.load(os.path.join("assets/Coins", "coin_01.png")),
 ]
-COIN = pygame.transform.scale(COIN [0], (25,25)) 
+COIN = pygame.transform.scale(COIN [0], (35,35)) 
 
 BIRD = [
     pygame.image.load(os.path.join("assets/Bird", "Bird1.png")),
@@ -225,7 +225,7 @@ class Power: #new class for powerup
     def __init__(self, image):
         self.image = POWER1 #get image of POWER1
         self.rect = pygame.Rect(75, 75, 75, 75) #make a square 75x75
-        self.rect.x = SCREEN_WIDTH + random.randint(800,1000) #randomize how long the width is
+        self.rect.x = SCREEN_WIDTH + random.randint(9000,10000) #randomize how long the width is
         self.rect.y = 215 #keep at certain height
     def update(self):
         self.rect.x -= game_speed #subtract the width from the game_speed
@@ -237,15 +237,17 @@ class Power: #new class for powerup
 class Coin:
     def __init__(self, image):
         self.image = COIN
-        self.rect = pygame.Rect(75,75,75,75)
-        self.rect.x = SCREEN_WIDTH + random.randint(700, 900)
-        self.rect.y = 310
+        self.rect = pygame.Rect(85,85,85,85)
+        self.rect.x = SCREEN_WIDTH + random.randint(500, 900)
+        self.rect.y = 360
+        for Obstacle in obstacles: 
+            if self.rect.colliderect(Obstacle.rect):
+                self.rect.y = 270
     def update(self):
         self.rect.x -= game_speed
         if self.rect.x < -self.rect.width:
             coins.pop()
-        #if Coin.colliderect(.rect):
-           # self.y = 320
+        
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.rect.x, self.rect.y))
@@ -457,7 +459,7 @@ def main():
 
 
 def menu(death_count):
-    global points
+    global points, collected
     global FONT_COLOR
     run = True
     while run:
@@ -475,6 +477,17 @@ def menu(death_count):
         elif death_count > 0:
             text = font.render("Press any Key to Restart", True, FONT_COLOR)
             score = font.render("Your Score: " + str(points), True, FONT_COLOR)
+            amount = font.render("Coins Collected: "+ str(collected), True, FONT_COLOR)
+            amountRect = amount.get_rect()
+            amountRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 150)
+            SCREEN.blit(amount, amountRect)
+            f = open("collected.txt", "a")
+            f.write(str(collected) + "\n")
+            f.close()
+            with open("collected.txt", "r") as f:
+                amount = (
+                    f.read())
+                collected_ints = [int(x) for x in amount.split()]
             scoreRect = score.get_rect()
             scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
             SCREEN.blit(score, scoreRect)

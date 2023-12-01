@@ -67,7 +67,7 @@ LASER = [RLASER1, RLASER2]
 BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
 
 INVINCIBILITY = pygame.image.load("assets/Invincibility.png")
-INVINCIBILITY = pygame.transform.scale(INVINCIBILITY, (25,25))
+INVINCIBILITY = pygame.transform.scale(INVINCIBILITY, (40,40))
 
 FONT_COLOR=(0,0,0)
 
@@ -97,8 +97,6 @@ class Dinosaur:
         self.dino_rect = self.image.get_rect()
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
-
-        self.invincible = False #new attribute for the player
 
     def update(self, userInput):
         if self.dino_duck:
@@ -173,35 +171,25 @@ class Dinosaur:
         self.dino_rect.y = self.Y_POS - 50
         self.step_index += 1
 
-    def invincible(self):
-        self.invincible = True
-        pygame.time.set_timer(pygame.USEREVENT + 1, 5000)
-        #ignore collisions phase through obstacles until timer ends
-
-    def invincible(self):
-        self.invincible = True
-        pygame.time.set_timer(pygame.USEREVENT + 1, 5000)
-        #ignore collisions phase through obstacles until timer ends
-
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
 class Invincibility:
     def __init__(self, image):
-        self.x = SCREEN_WIDTH + random.randint(800, 1000)
-        self.y = 225
+        self.rect = pygame.Rect(75, 75, 75, 75) # fix later
+        self.rect.x = SCREEN_WIDTH + random.randint(800, 1000)
+        self.rect.y = 225
         self.image = INVINCIBILITY 
-        self.rect = pygame.Rect(25, 25, 25, 25)
         self.width = self.image.get_width()
 
     def update(self):
-        self.x -= game_speed
-        if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
-            self.y = 225
+        self.rect.x -= game_speed
+        if self.rect.x < -self.width:
+            self.rect.x = SCREEN_WIDTH + random.randint(2500, 3000)
+            invincible.pop()
 
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y))
 
 
 class Cloud:
@@ -298,7 +286,7 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, powers, coins, collected, reference
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, powers, coins, collected, reference, invincible_react
     run = True
     clock = pygame.time.Clock()
     player = Dinosaur()
@@ -316,11 +304,13 @@ def main():
     pause = False
     collected = 0
     reference = 0
+    invincible_react = 0
 
     def Collected():
         global reference, collected, coins
         collected += 1
         reference -= 1
+
     def Collected_Screen():
         global collected
         with open("collected.txt", "r") as f:
@@ -329,7 +319,18 @@ def main():
         textRect = text.get_rect()
         textRect.center = (900, 70)
         SCREEN.blit(text, textRect) 
-    
+
+    def Invincible_update():
+        global invincible_react
+        if invincible_react > 0:
+            invincible_react -= 1
+
+    def Invicibility_text():
+        global invincible_react
+        text = font.render("Invincibility: " + str(invincible_react), True, FONT_COLOR) # maybe do the floor division thing, make less long OR less frequent the star spawns
+        textRect = text.get_rect()
+        textRect.center = (900, 100)
+        SCREEN.blit(text, textRect)
         
     def score():
         global points, game_speed
@@ -413,12 +414,16 @@ def main():
             i.update()
             if player.dino_rect.colliderect(i.rect):
                 invincible.pop()
+                invincible_react = 100
+                
+                
+
         for obstacle in obstacles:
             obstacle.draw(SCREEN)
             obstacle.update()
             if player.dino_collided == 6:
                 obstacles.pop()
-            if player.dino_rect.colliderect(obstacle.rect):
+            if player.dino_rect.colliderect(obstacle.rect) and invincible_react == 0:
                 pygame.time.delay(2000)
                 death_count += 1
                 menu(death_count)
@@ -451,6 +456,8 @@ def main():
         cloud.draw(SCREEN)
         cloud.update()
 
+        Invincible_update()
+        Invicibility_text()
         Collected_Screen()
         score()
 

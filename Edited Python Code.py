@@ -321,7 +321,7 @@ def main():
 
     def Invincible_update():
         global invincible_react
-        if invincible_react > 0: # KL: if the player gets the invicibility powerup, subtract one from invicible_react until it equals zero (acts as a timer)
+        if invincible_react > 0: # KL: if the player gets the invincibility power up, subtract one from invicible_react until it equals zero (acts as a timer)
             invincible_react -= 1
 
     def Invicibility_text():
@@ -406,7 +406,7 @@ def main():
             elif random.randint(0, 2) == 2:
                 obstacles.append(Bird(BIRD))
 
-        if len(invincible) == 0:  # KL: if the length of the variable invincible is equal to 0, do the followin
+        if len(invincible) == 0:  # KL: if the length of the variable invincible is equal to 0, do the following
             invincible.append(Invincibility(INVINCIBILITY)) # KL: creates a new invincibility power up and adds it to the invincible list
 
         for i in invincible: # KL: for every object in the list invincible, do the following

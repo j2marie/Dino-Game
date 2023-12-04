@@ -66,8 +66,8 @@ LASER = [RLASER1, RLASER2]
 
 BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
 
-INVINCIBILITY = pygame.image.load("assets/Invincibility.png") # load image of the invincibility star powerup
-INVINCIBILITY = pygame.transform.scale(INVINCIBILITY, (40,40)) # resize the image to be 40 X 40
+INVINCIBILITY = pygame.image.load("assets/Invincibility.png") # KL: load image of the invincibility star powerup
+INVINCIBILITY = pygame.transform.scale(INVINCIBILITY, (40,40)) # KL: resize the image to be 40 X 40
 
 FONT_COLOR=(0,0,0)
 
@@ -174,21 +174,21 @@ class Dinosaur:
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
-class Invincibility: # new class for the Invincibility powerup (star)
+class Invincibility: # KL: new class for the Invincibility powerup (star)
     def __init__(self, image):
-        self.rect = pygame.Rect(40, 40, 40, 40) # set the collision box to be a 40 x 40 square
-        self.rect.x = SCREEN_WIDTH + random.randint(10000, 15000) # draw the invincibility powerup at a random x location such that the powerup is relatively infrequent
-        self.rect.y = 225 # set the y location to be 255
-        self.image = INVINCIBILITY # get the corresponding image of the invincibility powerup
-        self.width = self.image.get_width() # get the hitbox of the image of the powerup
+        self.rect = pygame.Rect(40, 40, 40, 40) # KL: set the collision box to be a 40 x 40 square
+        self.rect.x = SCREEN_WIDTH + random.randint(10000, 15000) # KL: draw the invincibility powerup at a random x location such that the powerup is relatively infrequent
+        self.rect.y = 225 # KL: set the y location to be 255
+        self.image = INVINCIBILITY # KL: get the corresponding image of the invincibility powerup
+        self.width = self.image.get_width() # KL: get the hitbox of the image of the powerup
 
-    def update(self): # update the state of the powerup
-        self.rect.x -= game_speed # the x coord of the powerup moves to the left at a speed based on game_speed
-        if self.rect.x < -self.width: # if the power up moves completely off screen, do the following:
-            invincible.pop() # remove the power up
+    def update(self): # KL: update the state of the powerup
+        self.rect.x -= game_speed # KL: the x coord of the powerup moves to the left at a speed based on game_speed
+        if self.rect.x < -self.width: # KL: if the power up moves completely off screen, do the following:
+            invincible.pop() # KL: remove the power up
 
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) # blit the powerup onto the screen 
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) # KL: blit the powerup onto the screen 
 
 
 class Cloud:
@@ -302,8 +302,8 @@ def main():
     pause = False
     collected = 0
     reference = 0
-    invincible = [] # create an empty list for the invicibility powerup
-    invincible_react = 0 # add new variable for when the player hits the invinciblity powerup 
+    invincible = [] # KL: create an empty list for the invicibility powerup
+    invincible_react = 0 # KL: add new variable for when the player hits the invinciblity powerup 
 
     def Collected():
         global reference, collected, coins
@@ -321,15 +321,15 @@ def main():
 
     def Invincible_update():
         global invincible_react
-        if invincible_react > 0: # if the player gets the invicibility powerup, subtract one from invicible_react until it equals zero (acts as a timer)
+        if invincible_react > 0: # KL: if the player gets the invicibility powerup, subtract one from invicible_react until it equals zero (acts as a timer)
             invincible_react -= 1
 
     def Invicibility_text():
         global invincible_react
-        text = font.render("Invincibility: " + str(invincible_react//10), True, FONT_COLOR) # write text to show how long the invibility powerup will last
-        textRect = text.get_rect() # get the dimensions of the text
-        textRect.center = (900, 100) # center the text
-        SCREEN.blit(text, textRect) # blit it onto the screen
+        text = font.render("Invincibility: " + str(invincible_react//10), True, FONT_COLOR) # KL: write text to show how long the invibility powerup will last
+        textRect = text.get_rect() # KL: get the dimensions of the text
+        textRect.center = (900, 100) # KL: center the text
+        SCREEN.blit(text, textRect) # KL: blit it onto the screen
         
     def score():
         global points, game_speed
@@ -406,15 +406,15 @@ def main():
             elif random.randint(0, 2) == 2:
                 obstacles.append(Bird(BIRD))
 
-        if len(invincible) == 0:  #if the length of the variable invincible is equal to 0, do the followin
-            invincible.append(Invincibility(INVINCIBILITY)) # creates a new invincibility power up and adds it to the invincible list
+        if len(invincible) == 0:  # KL: if the length of the variable invincible is equal to 0, do the followin
+            invincible.append(Invincibility(INVINCIBILITY)) # KL: creates a new invincibility power up and adds it to the invincible list
 
-        for i in invincible: # for every object in the list invincible, do the following
-            i.draw(SCREEN) # draw the object onto the screen
-            i.update() #update the object
-            if player.dino_rect.colliderect(i.rect): # if the player collides with the powerup (object)
-                invincible.pop() # remove the powerup from the list
-                invincible_react = 100 # set the variable invicible_react to 100 (starts the timer)            
+        for i in invincible: # KL: for every object in the list invincible, do the following
+            i.draw(SCREEN) # KL: draw the object onto the screen
+            i.update() # KL: update the object
+            if player.dino_rect.colliderect(i.rect): # KL: if the player collides with the powerup (object)
+                invincible.pop() # KL: remove the powerup from the list
+                invincible_react = 100 # KL: set the variable invicible_react to 100 (starts the timer)            
 
         for obstacle in obstacles:
             obstacle.draw(SCREEN)
@@ -453,9 +453,9 @@ def main():
         cloud.draw(SCREEN)
         cloud.update()
 
-        Invincible_update() #update the invincibility powerup 
+        Invincible_update() #KL: update the invincibility powerup 
 
-        if invincible_react > 0: # only display the timer for the invincibility powerup while it is active
+        if invincible_react > 0: #KL: only display the timer for the invincibility powerup while it is active
             Invicibility_text()
 
         Collected_Screen()

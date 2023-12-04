@@ -1,3 +1,5 @@
+# Group: Lexi, Katie Leung (KL) 21077481, Joy Marie Salama
+
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
 import datetime 
@@ -128,10 +130,10 @@ class Dinosaur:
 #Katie Leung's Part:
 
 class Cloud: # creates a class for the clouds that move in the background
-    def __init__(self): # initalizes an object and is called upon the creation of an object in the class this function will run with "self" as a variable the represents the instance of the object???
-        self.x = SCREEN_WIDTH + random.randint(800, 1000) # sets the starting x position of the cloud will appear + a random number between 800 and 1000 from the right
-        self.y = random.randint(50, 100) # sets the starting y position of the cloud, is randomized within the bounds of 50 and 100 (from the top, (0,0) is the top left corner)
-        self.image = CLOUD  # makes the corresponding image of the cloud
+    def __init__(self): # initalizes the attributes of a class when an object is created with that class
+        self.x = SCREEN_WIDTH + random.randint(800, 1000) # sets the starting x position of the cloud at the screen width plus a random number between 800 and 1000 
+        self.y = random.randint(50, 100) # sets the starting y position of the cloud and is randomized within the bounds of 50 and 100 (from the top, (0,0) is the top left corner)
+        self.image = CLOUD  # sets the image to the corresponding image of the cloud
         self.width = self.image.get_width() # gets the pixel dimensions/hitbox (width and height) of the cloud image
 
     def update(self): #creates a function to update the clouds
@@ -185,7 +187,7 @@ class Bird(Obstacle): # create a subclass of Obstacle named Bird
     def draw(self, SCREEN): # create a new draw function that overrides the one in the parent class, Obstacle, since the bird is animated
         if self.index >= 9: # if the index reaches a value of 9, do the following: 
             self.index = 0 # reset the index to be zero
-        SCREEN.blit(self.image[self.index // 5], self.rect) # blit the bird onto the screen, such that when the index is between 0-4, the first image will be drawn while 5-9, the 2nd image is drawn
+        SCREEN.blit(self.image[self.index // 5], self.rect) # blit the bird onto the screen, such that when the index is between 0-4, the first image will be drawn while when the index is between 5-9, the 2nd image is drawn
         self.index += 1 # increment the index by one
 
 
@@ -195,9 +197,9 @@ def main(): #Create a function "main" where the functions and classes defined ab
     clock = pygame.time.Clock() # creates an object to track the time and assigns it to the variable clock
     player = Dinosaur() # creates an instance of the class Dinosaur and assigns it to the variable player
     cloud = Cloud() # creates an instance of the class Cloud and assigns it to the variable cloud
-    game_speed = 20 # sets the inital game speed to be 20 (the background, clouds, and obstacles are dependent on the game speed)
+    game_speed = 20 # sets the inital game speed to be 20 (the background, clouds, player, and obstacles are dependent on the game speed)
     x_pos_bg = 0 # sets the intial x coordinate of the background to be 0 
-    y_pos_bg = 380 # sets the inital y coordinate of the background to be 380 (where the dinosaur will be running on)
+    y_pos_bg = 380 # sets the inital y coordinate of the background to be 380 
     points = 0 # sets the inital value of points to be 0
     font = pygame.font.Font("freesansbold.ttf", 20) #create a font from the file "freesansbold.ttf" and set it to size 20 
     obstacles = [] #creates an empty list for the obstacles
@@ -210,7 +212,7 @@ def main(): #Create a function "main" where the functions and classes defined ab
         if points % 100 == 0: # every 100 points, the game speed increases by 1, increasing the difficulty of the game
             game_speed += 1 # increase the game speed by 1
         current_time = datetime.datetime.now().hour # get the current hour in the datetime module
-        with open("score.txt", "r") as f: # open the score.txt file ??????/ what is with??
+        with open("score.txt", "r") as f: # open and read the score.txt file and assign the open file to the variable f, automatically close it once it is done reading
             score_ints = [int(x) for x in f.read().split()] # read "score.txt" and split it into a list of strings, then convert the strings into integers for all the items in the file
             highscore = max(score_ints) # find the highest value of the scores to find the current highscore
             if points > highscore: #if the player's current points are higher than the highscore, do the following:

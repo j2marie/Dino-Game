@@ -54,8 +54,8 @@ BIRD = [
 
 CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
 
-POWER = pygame.image.load(os.path.join("assets/Power", "power_star1")) #Added image of the purple star power-up
-POWER1 = pygame.transform.scale(POWER, (40,40)) #resized the purple star to 40 x 40
+POWER = pygame.image.load(os.path.join("assets/Power", "power_star1.png")) #Added image of the purple star power-up
+POWER1 = pygame.transform.scale(POWER, (60,45)) #resized the purple star to 40 x 40
 
 LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png")) #Added image of the laser
 LASER2 = pygame.image.load(os.path.join("assets/Power", "dino_laser2.png")) #Added image of the laser

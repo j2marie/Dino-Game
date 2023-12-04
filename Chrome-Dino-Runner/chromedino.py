@@ -240,7 +240,7 @@ def main(): #Create a function "main" where the functions and classes defined ab
 
     def paused():
         nonlocal pause #Refers to the variable 'pause' outside of the function. 
-        pause = True #Changes the original value of pause (False) to True
+        pause = True #Changes the original value of pause (False) to True. This starts the game
         font = pygame.font.Font("freesansbold.ttf", 30) #Creates a new Font by grabbing it from the file 'freesansbold.ttf'. Makes the font size 30.
         text = font.render("Game Paused, Press 'u' to Unpause", True, FONT_COLOR) #Creates an image of the font (Game Paused, Press 'u' to Unpause), that will then be blit to the Screen.
         textRect = text.get_rect() #Return specified rectangular area of the text *but not area is given?
@@ -271,7 +271,7 @@ def main(): #Create a function "main" where the functions and classes defined ab
             SCREEN.fill((0, 0, 0)) #Change the screen to the colour black
         userInput = pygame.key.get_pressed() #Returns the state of the key to 1 if it gets pressed, or else it will stay 0
 
-        player.draw(SCREEN) #Draws the dinosaur ontop of the new screen???
+        player.draw(SCREEN) #Draws the dinosaur ontop of the new screen
         player.update(userInput) #Check what the user input is, and it will update the player's actions because of it.
 
         if len(obstacles) == 0: #if the length of the variable obstacles is equal to 0, do the following:
@@ -283,19 +283,19 @@ def main(): #Create a function "main" where the functions and classes defined ab
                 obstacles.append(Bird(BIRD)) #Inupt a bird as an obstacle
 
         for obstacle in obstacles: #A for loop for the variable obstacles
-            obstacle.draw(SCREEN)  #Draws the new obstacle ontop of the new screen ???
-            obstacle.update() #Checks what the obstacle is, and updates the obstacle shown ???
+            obstacle.draw(SCREEN)  #Draws the new obstacle ontop of the new screen
+            obstacle.update() #Checks what the obstacle is, and updates the obstacle shown 
             if player.dino_rect.colliderect(obstacle.rect): # If the dinosaur collides with the obstacles, do the following:
                 pygame.time.delay(2000) #Pause the game for 2 seconds
-                death_count += 1 #Increase the death count by 1
-                menu(death_count) # Create a menu with the number of death counts ??? - I don't know what this does ????
+                death_count += 1 #Increase the death count by 1, this allows the second if statement below to run
+                menu(death_count) # Go to the menu that shows the final score and highscore
 
-        background() #For the function background
+        background() #Run the background function
 
         cloud.draw(SCREEN) #Draw the cloud image onto the screen
         cloud.update() #update the cloud
 
-        score()  #For the function score
+        score()  #Run the score function
 
         clock.tick(30) #Tells the game to run no more than 30 frames per second.
         pygame.display.update() #update the display
@@ -320,7 +320,7 @@ def menu(death_count): #Defines a function 'menu' with the variable death_count
         elif death_count > 0: #if the death count is greater than 0, do the following:
             text = font.render("Press any Key to Restart", True, FONT_COLOR) #Create an image of the font (Press any Key to Restart) in the Font described above
             score = font.render("Your Score: " + str(points), True, FONT_COLOR) #Create an image of the words  - Your score - with the string of the points calculated from the game
-            scoreRect = score.get_rect() #Returns the image of the rectangle (but no area given???)
+            scoreRect = score.get_rect() #Returns the image of the rectangle 
             scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50) #Centre the rectangle by the width of the screen divided by 2 and the height of the screen divided by 2 and add 50.
             SCREEN.blit(score, scoreRect) #Copies the score and the rectange onto the screen
             f = open("score.txt", "a") #Open and create the file score.txt and return it as a file object
@@ -329,7 +329,7 @@ def menu(death_count): #Defines a function 'menu' with the variable death_count
             with open("score.txt", "r") as f: #Opens the file score.txt to read it, and after this function is finished, it automatically closes the file.
                 score = (
                     f.read()
-                )  # Read all file in case values are not on a single line and returns it as a strin
+                )  # Input the score in the score.text
                 score_ints = [int(x) for x in score.split()]  # Convert strings to ints
             highscore = max(score_ints)  # sum all elements of the list. Find the highest value in score_ints.
             hs_score_text = font.render(
@@ -355,5 +355,5 @@ def menu(death_count): #Defines a function 'menu' with the variable death_count
 
 t1 = threading.Thread(target=menu(death_count=0), daemon=True) #Return the death count to 0, allow the program to exit
 t1.start() #Start the thread
-#Parts: 0-123, 123-236, 236-354
+#Parts: Lexi: 0-123, Katie: 123-236, Joy: 236-354
 

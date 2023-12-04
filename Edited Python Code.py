@@ -54,14 +54,14 @@ BIRD = [
 
 CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
 
-POWER = pygame.image.load(os.path.join("assets/Power", "circle.png")) #Added image of the circle power-up
-POWER1 = pygame.transform.scale(POWER, (50,50)) #resized the circle
+POWER = pygame.image.load(os.path.join("assets/Power", "power_star1.png")) #Added image of the purple star power-up
+POWER1 = pygame.transform.scale(POWER, (60,45)) #resized the purple star to 40 x 40
 
-LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png"))
+LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png")) #Added image of the laser
 LASER2 = pygame.image.load(os.path.join("assets/Power", "dino_laser2.png")) #Added image of the laser
-RLASER1 = pygame.transform.scale(LASER1, (300,200))
-RLASER2 = pygame.transform.scale(LASER1, (300,200))
-LASER = [RLASER1, RLASER2]
+RLASER1 = pygame.transform.scale(LASER1, (300,200)) #resized the laser image to fit the scale of the game
+RLASER2 = pygame.transform.scale(LASER1, (300,200)) #resized the laser image to fit the scale of the game
+LASER = [RLASER1, RLASER2] #Made them into a list
 
 
 BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
@@ -89,7 +89,7 @@ class Dinosaur:
         self.dino_run = True
         self.dino_jump = False
         self.dino_laser = False #added new initial start for power-up
-        self.dino_collided = 0
+        self.dino_collided = 0 #variable to set standard for dino in regular run
 
         self.step_index = 0
         self.jump_vel = self.JUMP_VEL
@@ -105,8 +105,8 @@ class Dinosaur:
             self.run()
         if self.dino_jump:
             self.jump()
-        if self.dino_laser:
-            self.laser()
+        if self.dino_laser: #if the dino is in the state of dino_laser (it is equal to True)
+            self.laser() #execute this function
 
         if self.step_index >= 10:
             self.step_index = 0
@@ -115,24 +115,24 @@ class Dinosaur:
             self.dino_duck = False
             self.dino_run = False
             self.dino_jump = True
-            self.dino_laser = False
+            self.dino_laser = False #Set it to False
         elif userInput[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
             self.dino_run = False
             self.dino_jump = False
-            self.dino_laser = False
-        elif userInput[pygame.K_RIGHT] and not self.dino_jump:
-            if self.dino_collided > 0:
-                self.dino_duck = False
-                self.dino_run = False
-                self.dino_jump = False
-                self.dino_laser = True
-                self.dino_collided -= 1 
-            else:
-                self.dino_duck = False
-                self.dino_run = True
-                self.dino_jump = False
-                self.dino_laser = False
+            self.dino_laser = False #Set it to False
+        elif userInput[pygame.K_RIGHT] and not self.dino_jump: #If the user presses the right arrow, do the following
+            if self.dino_collided > 0: #If the dino_collided is above 0, do the following:
+                self.dino_duck = False #Set dino_duck to False
+                self.dino_run = False #Set dino_run to False
+                self.dino_jump = False #Set dino_jump to False (so not to execute this function)
+                self.dino_laser = True #Set dino_laser to True (will then allow the laser function to run)
+                self.dino_collided -= 1 #Subtract the number set to dino_collided by 1. This is to allow the superpower to be available only for an amount of time
+            else: #if it equal to 0 or below, do the following (the dino will run like normal with no superpower)
+                self.dino_duck = False #Set dino_duck to False
+                self.dino_run = True #Set dino_run to true
+                self.dino_jump = False #Set dino_jump to False
+                self.dino_laser = False #Set dino_laser to False
             
         elif not (self.dino_jump or userInput[pygame.K_DOWN]):
             self.dino_duck = False
@@ -164,12 +164,12 @@ class Dinosaur:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
     
-    def laser(self):
-        self.image = self.laser_img[self.step_index // 5]
-        self.dino_rect = self.image.get_rect()
-        self.dino_rect.x = self.X_POS + 25
-        self.dino_rect.y = self.Y_POS - 50
-        self.step_index += 1
+    def laser(self): #the laser function that will run when dino_laser is set to True
+        self.image = self.laser_img[self.step_index // 5] #Choose the laser image
+        self.dino_rect = self.image.get_rect() #Put a rectangular box around the image
+        self.dino_rect.x = self.X_POS + 25 #Put an extra width of 25 around the dino
+        self.dino_rect.y = self.Y_POS - 50 #set the y location of the dino
+        self.step_index += 1 #add one to the step_index
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
@@ -285,7 +285,7 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, powers, coins, collected, reference, invincible_react
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, powers, coins, collected, reference, invincible_react #Made more global variables to work throughout the function
     run = True
     clock = pygame.time.Clock()
     player = Dinosaur()
@@ -296,11 +296,11 @@ def main():
     points = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     obstacles = []
-    powers = []
+    powers = [] #start at an empty list
     death_count = 0
     coins = []
     pause = False
-    collected = 0
+    collected = 0 
     reference = 0
     invincible = [] # KL: create an empty list for the invicibility powerup
     invincible_react = 0 # KL: add new variable for when the player hits the invinciblity powerup 
@@ -426,14 +426,14 @@ def main():
                 death_count += 1
                 menu(death_count)
         
-        if len(powers) == 0:
-            powers.append(Power(POWER1))
-        for power in powers:
-            power.draw(SCREEN)
-            power.update()
-            if player.dino_rect.colliderect(power.rect):
-                powers.pop()
-                player.dino_collided = 7
+        if len(powers) == 0: #if the length of powers (the empty list) is equal to 0, then do the following
+            powers.append(Power(POWER1)) #add in the power image
+        for power in powers: #start a for loop for the power image in the list
+            power.draw(SCREEN) #draw the power image
+            power.update() #update it
+            if player.dino_rect.colliderect(power.rect): #if the dino collides with the rectangular area of the power, do the following
+                powers.pop() #make the power image disappear
+                player.dino_collided = 7 #make the variable dino_collided to 7, so that it can start the function of the dino using the laser
         
         if len(coins) == 0:
             coins.append(Coin(COIN))

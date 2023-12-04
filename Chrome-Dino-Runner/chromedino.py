@@ -148,7 +148,7 @@ class Cloud: # creates a class for the clouds that move in the background
 class Obstacle: # create a class named "Obstacle" for the cacti and birds that the player must avoid
     def __init__(self, image, type): # create a intializing function with self, image, and type as its parameters
         self.image = image # assign the "image" parameter to the attribute "image"
-        self.type = type # assign the "image" parameter to the attribute "image"
+        self.type = type # assign the "type" parameter to the attribute "type"
         self.rect = self.image[self.type].get_rect() # get the dimensions (coordinates) of the image
         self.rect.x = SCREEN_WIDTH # set the inital x coordinate of the obstacle to be the screen width (just off the right side of the screen)
 

@@ -54,14 +54,14 @@ BIRD = [
 
 CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
 
-POWER = pygame.image.load(os.path.join("assets/Power", "power_star1.png")) #Added image of the purple star power-up
-POWER1 = pygame.transform.scale(POWER, (60,45)) #resized the purple star to 40 x 40
+POWER = pygame.image.load(os.path.join("assets/Power", "power_star1.png")) #JS Added image of the purple star power-up
+POWER1 = pygame.transform.scale(POWER, (60,45)) #JS resized the purple star to 60 x 45
 
-LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png")) #Added image of the laser
-LASER2 = pygame.image.load(os.path.join("assets/Power", "dino_laser2.png")) #Added image of the laser
-RLASER1 = pygame.transform.scale(LASER1, (300,200)) #resized the laser image to fit the scale of the game
-RLASER2 = pygame.transform.scale(LASER1, (300,200)) #resized the laser image to fit the scale of the game
-LASER = [RLASER1, RLASER2] #Made them into a list
+LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png")) #JS Added image of the laser
+LASER2 = pygame.image.load(os.path.join("assets/Power", "dino_laser2.png")) #JS Added image of the laser
+RLASER1 = pygame.transform.scale(LASER1, (300,200)) #JS resized the laser image to fit the scale of the game
+RLASER2 = pygame.transform.scale(LASER1, (300,200)) #JS resized the laser image to fit the scale of the game
+LASER = [RLASER1, RLASER2] #JS Made them into a list
 
 
 BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
@@ -208,18 +208,18 @@ class Cloud:
         SCREEN.blit(self.image, (self.x, self.y))
 
 
-class Power: #new class for powerup
+class Power: #JS New class for powerup
     def __init__(self, image):
-        self.image = POWER1 #get image of POWER1
-        self.rect = pygame.Rect(75, 75, 75, 75) #make a square 75x75
-        self.rect.x = SCREEN_WIDTH + random.randint(9000,10000) #randomize how long the width is
-        self.rect.y = 215 #keep at certain height
+        self.image = POWER1 # JS Get image of POWER1
+        self.rect = pygame.Rect(75, 75, 75, 75) #JS make a square 75x75
+        self.rect.x = SCREEN_WIDTH + random.randint(9000,10000) #JS randomize how long the width is
+        self.rect.y = 215 #JS keep at certain height
     def update(self):
-        self.rect.x -= game_speed #subtract the width from the game_speed
-        if self.rect.x < -self.rect.width: #if the width is smaller than the -width
-            powers.pop() #make it disappear
+        self.rect.x -= game_speed #JS subtract the width from the game_speed
+        if self.rect.x < -self.rect.width: #JS if the width is smaller than the -width
+            powers.pop() #JS make it disappear
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) #bring it to the surface
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) #JS bring it to the surface
 
 class Coin:
     def __init__(self, image):
@@ -296,7 +296,7 @@ def main():
     points = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     obstacles = []
-    powers = [] #start at an empty list
+    powers = [] #JS start at an empty list
     death_count = 0
     coins = []
     pause = False
@@ -419,21 +419,21 @@ def main():
         for obstacle in obstacles:
             obstacle.draw(SCREEN)
             obstacle.update()
-            if player.dino_collided == 6:
-                obstacles.pop()
+            if player.dino_collided == 6: #JS If the variable is equal to 6 (happens when the right arrow is pressed)
+                obstacles.pop() #JS Remove the obstacle infront of it
             if player.dino_rect.colliderect(obstacle.rect) and invincible_react == 0:
                 pygame.time.delay(2000)
                 death_count += 1
                 menu(death_count)
         
-        if len(powers) == 0: #if the length of powers (the empty list) is equal to 0, then do the following
-            powers.append(Power(POWER1)) #add in the power image
-        for power in powers: #start a for loop for the power image in the list
-            power.draw(SCREEN) #draw the power image
-            power.update() #update it
-            if player.dino_rect.colliderect(power.rect): #if the dino collides with the rectangular area of the power, do the following
-                powers.pop() #make the power image disappear
-                player.dino_collided = 7 #make the variable dino_collided to 7, so that it can start the function of the dino using the laser
+        if len(powers) == 0: #JS if the length of powers (the empty list) is equal to 0, then do the following
+            powers.append(Power(POWER1)) #JS add in the power image
+        for power in powers: #JS start a for loop for the power image in the list
+            power.draw(SCREEN) #JS draw the power image
+            power.update() #JS update it
+            if player.dino_rect.colliderect(power.rect): #JS if the dino collides with the rectangular area of the power, do the following
+                powers.pop() #JS make the power image disappear
+                player.dino_collided = 7 #JS make the variable dino_collided to 7, so that it can start the function of the dino using the laser
         
         if len(coins) == 0:
             coins.append(Coin(COIN))

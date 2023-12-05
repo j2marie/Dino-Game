@@ -55,7 +55,7 @@ BIRD = [
 CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
 
 POWER = pygame.image.load(os.path.join("assets/Power", "power_star1.png")) #JS Added image of the purple star power-up
-POWER1 = pygame.transform.scale(POWER, (60,45)) #JS resized the purple star to 60 x 45
+POWER1 = pygame.transform.scale(POWER, (80,65)) #JS resized the purple star to 60 x 45
 
 LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png")) #JS Added image of the laser
 LASER2 = pygame.image.load(os.path.join("assets/Power", "dino_laser2.png")) #JS Added image of the laser
@@ -229,7 +229,7 @@ class Coin:
         self.rect.y = 340
         for Obstacle in obstacles: 
             if self.rect.colliderect(Obstacle.rect):
-                self.rect.y = 270
+                self.rect.y = 200
     def update(self):
         self.rect.x -= game_speed
         if self.rect.x < -self.rect.width:

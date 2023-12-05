@@ -41,11 +41,11 @@ LARGE_CACTUS = [
     pygame.image.load(os.path.join("assets/Cactus", "LargeCactus3.png")),
 ]
 
-COIN = [
-pygame.image.load(os.path.join("assets/Coins", "coin_00.png")), 
-pygame.image.load(os.path.join("assets/Coins", "coin_01.png")),
+COIN = [ 
+    pygame.image.load(os.path.join("assets/Coins", "coin_00.png")), # LB Added image of the coin
+    pygame.image.load(os.path.join("assets/Coins", "coin_00.png")),  
 ]
-COIN = pygame.transform.scale(COIN [0], (35,35)) 
+COIN = pygame.transform.scale(COIN [0], (35,35))  # LB resized the coin to 35 x 35 
 
 BIRD = [
     pygame.image.load(os.path.join("assets/Bird", "Bird1.png")),
@@ -221,23 +221,23 @@ class Power: #JS New class for powerup
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.rect.x, self.rect.y)) #JS bring it to the surface
 
-class Coin:
+class Coin: # LB created a class for the coins 
     def __init__(self, image):
-        self.image = COIN
-        self.rect = pygame.Rect(85,85,85,85)
-        self.rect.x = SCREEN_WIDTH + random.randint(500, 900)
-        self.rect.y = 340
-        for Obstacle in obstacles: 
-            if self.rect.colliderect(Obstacle.rect):
-                self.rect.y = 200
-    def update(self):
-        self.rect.x -= game_speed
-        if self.rect.x < -self.rect.width:
-            coins.pop()
+        self.image = COIN # LB set that the class coinis will use the image of the coin 
+        self.rect = pygame.Rect(85,85,85,85) # LB made the rectange or hitbox around the coins 
+        self.rect.x = SCREEN_WIDTH + random.randint(500, 900) # LB set how often a coin will spawn on the width of the screen 
+        self.rect.y = 340 # LB set how high the coins will spawn on screen 
+        for Obstacle in obstacles: # LB assigned it as an obstacles
+            if self.rect.colliderect(Obstacle.rect): # LB Makes the coins collude with the dinasaur 
+                self.rect.y = 200 # LB when the coin has been collided with move it far wnough down so thatit can not be seen 
+    def update(self): 
+        self.rect.x -= game_speed # LB the width of the coin will be moving eith the game speed 
+        if self.rect.x < -self.rect.width: # LB if the coin sidth is smaller than the negative of the dinasaurs width
+            coins.pop() # make is disapear 
         
 
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.rect.x, self.rect.y))
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) # LB bring the coinn to the surface 
 
 class Obstacle:
     def __init__(self, image, type):
@@ -298,23 +298,23 @@ def main():
     obstacles = []
     powers = [] #JS start at an empty list
     death_count = 0
-    coins = []
+    coins = [] #LB strated an empty list for coins 
     pause = False
-    collected = 0 
+    collected = 0 # LB creates a new variable for when the coins are collected 
     reference = 0
     invincible = [] # KL: create an empty list for the invicibility powerup
     invincible_react = 0 # KL: add new variable for when the player hits the invinciblity powerup 
 
-    def Collected():
-        global reference, collected, coins
-        collected += 1
-        reference -= 1
+    def Collected(): # LB defines the new variable collecteed
+        global reference, collected, coins # LB shows what variables will be referenced in this definition and allows them to be used in this def
+        collected += 1 # LB when collected is triggered plus one 
+        reference -= 1 # LB when refence is triggered minus one 
 
-    def Collected_Screen():
-        global collected
-        with open("collected.txt", "r") as f:
-            collected_ints = [int(x) for x in f.read().split()]  
-            text = font.render("Coins: " + str(collected), True, FONT_COLOR)
+    def Collected_Screen(): # LB defines what wil show on the scren when coins are collected 
+        global collected # LB used the variable collected defined above 
+        with open("collected.txt", "r") as f: # LB opens the index collected.txt 
+            collected_ints = [int(x) for x in f.read().split()] # LB reads the contents of "collected.txt," splits them into a list of strings and the converts them into an integer
+            text = font.render("Coins: " + str(collected), True, FONT_COLOR) # LB makes the message on the screen appear that shows how many coins have been collected 
         textRect = text.get_rect()
         textRect.center = (900, 70)
         SCREEN.blit(text, textRect) 
@@ -435,14 +435,15 @@ def main():
                 powers.pop() #JS make the power image disappear
                 player.dino_collided = 7 #JS make the variable dino_collided to 7, so that it can start the function of the dino using the laser
         
-        if len(coins) == 0:
-            coins.append(Coin(COIN))
-        for c in coins:
-            c.draw(SCREEN)
-            c.update()
-            if player.dino_rect.colliderect(c.rect):
-                coins.pop()
-                reference = 1 
+        if len(coins) == 0: # LB  if the length of coins is equal to 0
+            coins.append(Coin(COIN)) # LB load the coin image 
+        for c in coins: # LB start a loop for the coin image in the list 
+            c.draw(SCREEN) # LB draw the image of the coin 
+            c.update() # LB update the image 
+            if player.dino_rect.colliderect(c.rect): # LB if the dino collides with the coin 
+                coins.pop() # LB make the coin disapear 
+                reference = 1 # LB make the variable dino_collided to 1 to start the function of the coins disapearing
+        
     
         if reference > 0:
             Collected()
@@ -458,8 +459,9 @@ def main():
         if invincible_react > 0: #KL: only display the timer for the invincibility powerup while it is active
             Invicibility_text()
 
-        Collected_Screen()
-        score()
+        Collected_Screen() # LB Displays the amount of coins collected on the screen 
+        
+        score() 
 
         clock.tick(30)
         pygame.display.update()

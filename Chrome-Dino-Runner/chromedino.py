@@ -1,126 +1,127 @@
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
-import datetime 
-import os 
-import random 
-import threading 
+#Lexi Baatje's Part Starts
+import datetime #imports date time from computer
+import os #lets the file interact with the underlying operating system
+import random #makes it so that things can be spawned at random 
+import threading #this finction allows multiple threads of execution to take place
 
-import pygame 
+import pygame #this imports pygame the module that mkaes this a video game 
 
-pygame.init() 
+pygame.init() #initializes all imported pygame modules
 
 # Global Constants
 
-SCREEN_HEIGHT = 600 
-SCREEN_WIDTH = 1100 
-SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) 
+SCREEN_HEIGHT = 600 #creates a variable of screen height and sets it to the value they want 
+SCREEN_WIDTH = 1100 #creates a variable of screen height and sets it to the value they want 
+SCREEN = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT)) #takes the two values of screen height adn screen width and sets them as the screen hight and width 
 
-pygame.display.set_caption("Chrome Dino Runner")
+pygame.display.set_caption("Chrome Dino Runner") #shows the words on the start screen
 
-Ico = pygame.image.load("assets/DinoWallpaper.png")
-pygame.display.set_icon(Ico)
+Ico = pygame.image.load("assets/DinoWallpaper.png") # sets Ico to load the wallpaper for the dino game 
+pygame.display.set_icon(Ico) #displays Ico or the background of the dino game 
 
-RUNNING = [
-    pygame.image.load(os.path.join("assets/Dino", "DinoRun1.png")),
-    pygame.image.load(os.path.join("assets/Dino", "DinoRun2.png")),
+RUNNING = [ #creates a list of the images included under this catagory 
+    pygame.image.load(os.path.join("assets/Dino", "DinoRun1.png")), #goes into the assets folder and then the dino folder and loads the first DinoRun image
+    pygame.image.load(os.path.join("assets/Dino", "DinoRun2.png")), #goes into the assets folder and then the dino folder and loads the second DinoRun image
 ]
 JUMPING = pygame.image.load(os.path.join("assets/Dino", "DinoJump.png"))
-DUCKING = [
-    pygame.image.load(os.path.join("assets/Dino", "DinoDuck1.png")),
-    pygame.image.load(os.path.join("assets/Dino", "DinoDuck2.png")),
+DUCKING = [ #creates a list of the images included under this catagory
+    pygame.image.load(os.path.join("assets/Dino", "DinoDuck1.png")), #goes into the assets folder and then the dino folder and loads the first DinoDuck image
+    pygame.image.load(os.path.join("assets/Dino", "DinoDuck2.png")), #goes into the assets folder and then the dino folder and loads the second DinoDuck image
 ]
 
-SMALL_CACTUS = [
-    pygame.image.load(os.path.join("assets/Cactus", "SmallCactus1.png")),
-    pygame.image.load(os.path.join("assets/Cactus", "SmallCactus2.png")),
-    pygame.image.load(os.path.join("assets/Cactus", "SmallCactus3.png")),
+SMALL_CACTUS = [ #creates a list of the images included under this catagory
+    pygame.image.load(os.path.join("assets/Cactus", "SmallCactus1.png")), #goes into the assets folder and then the cactus folder and loads the first SmallCactus image
+    pygame.image.load(os.path.join("assets/Cactus", "SmallCactus2.png")), #goes into the assets folder and then the cactus folder and loads the second SmallCactus image
+    pygame.image.load(os.path.join("assets/Cactus", "SmallCactus3.png")), #goes into the assets folder and then the cactus folder and loads the third SmallCactus image
 ]
-LARGE_CACTUS = [
-    pygame.image.load(os.path.join("assets/Cactus", "LargeCactus1.png")),
-    pygame.image.load(os.path.join("assets/Cactus", "LargeCactus2.png")),
-    pygame.image.load(os.path.join("assets/Cactus", "LargeCactus3.png")),
-]
-
-BIRD = [
-    pygame.image.load(os.path.join("assets/Bird", "Bird1.png")),
-    pygame.image.load(os.path.join("assets/Bird", "Bird2.png")),
+LARGE_CACTUS = [ #creates a list of the images included under this catagory
+    pygame.image.load(os.path.join("assets/Cactus", "LargeCactus1.png")), #goes into the assets folder and then the cactus folder and loads the first LargeCactus image
+    pygame.image.load(os.path.join("assets/Cactus", "LargeCactus2.png")), #goes into the assets folder and then the cactus folder and loads the second LargeCactus image
+    pygame.image.load(os.path.join("assets/Cactus", "LargeCactus3.png")), #goes into the assets folder and then the cactus folder and loads the third LargeCactus image
 ]
 
-CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
+BIRD = [ # creates a list of the images under this catagory 
+    pygame.image.load(os.path.join("assets/Bird", "Bird1.png")), #goes into the assets folder and then the bird folder and loads the first Bird image
+    pygame.image.load(os.path.join("assets/Bird", "Bird2.png")), #goes into the assets folder and then the bird folder and loads the seonc Bird image
+]
 
-BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
+CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png")) #goes into the assets folder and then the Other folder and loads the Cloud image
 
-FONT_COLOR=(0,0,0)
+BG = pygame.image.load(os.path.join("assets/Other", "Track.png")) #goes into the assets folder and then the Other folder and loads the Track image to be the ground 
 
-class Dinosaur:
+FONT_COLOR=(0,0,0) #sets the font colour
 
-    X_POS = 80
-    Y_POS = 310
-    Y_POS_DUCK = 340
-    JUMP_VEL = 8.5
+class Dinosaur: # makes a class for the dinasaur where how it moves and works will be defined 
 
-    def __init__(self):
-        self.duck_img = DUCKING
-        self.run_img = RUNNING
-        self.jump_img = JUMPING
+    X_POS = 80 # width of the dinasaur is set to 80 
+    Y_POS = 310 # height of dinasaur is set to 310
+    Y_POS_DUCK = 340 # heght of the dinasaur when ducking set to 340 (the higher the number the lower the height)  
+    JUMP_VEL = 8.5 # the height of the jump 
 
-        self.dino_duck = False
-        self.dino_run = True
-        self.dino_jump = False
+    def __init__(self): # initalizes an object and is called upon the creation of an object in the class this function will run with "self" as a variable the represents the instance of the object
+        self.duck_img = DUCKING # uses the image defined earlier for the dino ducking 
+        self.run_img = RUNNING  # uses the image defined earlier for the dino running
+        self.jump_img = JUMPING  # uses the image defined earlier for the dino jumping 
 
-        self.step_index = 0
-        self.jump_vel = self.JUMP_VEL
-        self.image = self.run_img[0]
-        self.dino_rect = self.image.get_rect()
-        self.dino_rect.x = self.X_POS
+        self.dino_duck = False # says that dino duck will not be going at all times
+        self.dino_run = True # says that dino run will be going at all times
+        self.dino_jump = False # says that dino jump will not be going at all times
+
+        self.step_index = 0 # sets the variable self.step_index to zero as this variable will be used in the def of self, run and jump and represents that the game is in the first phase
+        self.jump_vel = self.JUMP_VEL # sets this variable as the height of the jump defined above 
+        self.image = self.run_img[0] # uses the dinp run list of images and toggles between them 
+        self.dino_rect = self.image.get_rect() # this makes a rectagnles around the dinosaur image that is its hit box 
+        self.dino_rect.x = self.X_POS # sets this variable as the width of the dino defined above
+        self.dino_rect.y = self.Y_POS # sets this variable as the height of the dino defined above
+
+    def update(self, userInput): # creates a finction to update the dino 
+        if self.dino_duck: # if the user uses the duck command (the dino duck is set to true)
+            self.duck() # make the dinoaur duck 
+        if self.dino_run: # while dino run is set as true 
+            self.run() # make the dino run foward
+        if self.dino_jump: # if the user uses the jump command (the dino jump is set to true)
+            self.jump() # make the dino jump 
+
+        if self.step_index >= 10: # is the phase of the game is less than of equal to zero 
+            self.step_index = 0 # set it back to zero 
+
+        if (userInput[pygame.K_UP] or userInput[pygame.K_SPACE]) and not self.dino_jump: # If the user uses the space bar or the up arrow
+            self.dino_duck = False # set dino duck to false meaning the dino does not duck 
+            self.dino_run = False # set dino run to false meaning the dino is not rinning 
+            self.dino_jump = True # set dino jump to true menaing the dino will jump when the space of up arrow key is pressed 
+        elif userInput[pygame.K_DOWN] and not self.dino_jump: # If user presses the down arrow while plaing 
+            self.dino_duck = True # set dino duck to true meaning that when the down arrow is pressed the dino will duck 
+            self.dino_run = False # set dino run to false 
+            self.dino_jump = False # set dino jump to false 
+        elif not (self.dino_jump or userInput[pygame.K_DOWN]): # if no button is pressed 
+            self.dino_duck = False # keep the dino duck at false 
+            self.dino_run = True # keep the dino run at true meaning it will not stop running unless the space bar, up arrow or down arrow are pressed
+            self.dino_jump = False # keep the dino jump false
+
+    def duck(self): # defining what happens when the dinasaur ducks 
+        self.image = self.duck_img[self.step_index // 5] # selects the dino dunckng image when the dino is ducking 
+        self.dino_rect = self.image.get_rect() # sets the rectangle around the dinosaur to a different one so that the dino is able to go below some obstacles 
+        self.dino_rect.x = self.X_POS # the width of the dino stays the same  
+        self.dino_rect.y = self.Y_POS_DUCK # the height of the dino while ducking is set to the vaiable defined above
+        self.step_index += 1 # increasing the step index for the next frame of the ducking animation
+
+    def run(self): # defining what happens when the dinasaur runs 
+        self.image = self.run_img[self.step_index // 5] # selects the dino run images while dino is running 
+        self.dino_rect = self.image.get_rect() # sets the rectangle around the dinosaur 
+        self.dino_rect.x = self.X_POS # the width and height of the dino stay the same 
         self.dino_rect.y = self.Y_POS
+        self.step_index += 1 # increasing the step index for the next frame of the ducking animation
 
-    def update(self, userInput):
-        if self.dino_duck:
-            self.duck()
-        if self.dino_run:
-            self.run()
-        if self.dino_jump:
-            self.jump()
-
-        if self.step_index >= 10:
-            self.step_index = 0
-
-        if (userInput[pygame.K_UP] or userInput[pygame.K_SPACE]) and not self.dino_jump:
-            self.dino_duck = False
-            self.dino_run = False
-            self.dino_jump = True
-        elif userInput[pygame.K_DOWN] and not self.dino_jump:
-            self.dino_duck = True
-            self.dino_run = False
-            self.dino_jump = False
-        elif not (self.dino_jump or userInput[pygame.K_DOWN]):
-            self.dino_duck = False
-            self.dino_run = True
-            self.dino_jump = False
-
-    def duck(self):
-        self.image = self.duck_img[self.step_index // 5]
-        self.dino_rect = self.image.get_rect()
-        self.dino_rect.x = self.X_POS
-        self.dino_rect.y = self.Y_POS_DUCK
-        self.step_index += 1
-
-    def run(self):
-        self.image = self.run_img[self.step_index // 5]
-        self.dino_rect = self.image.get_rect()
-        self.dino_rect.x = self.X_POS
-        self.dino_rect.y = self.Y_POS
-        self.step_index += 1
-
-    def jump(self):
-        self.image = self.jump_img
-        if self.dino_jump:
-            self.dino_rect.y -= self.jump_vel * 4
-            self.jump_vel -= 0.8
-        if self.jump_vel < -self.JUMP_VEL:
-            self.dino_jump = False
-            self.jump_vel = self.JUMP_VEL #End Of LExis Part
+    def jump(self):  # defining what happens when the dinasaur jumps
+        self.image = self.jump_img # selects the dino jump image while dino is jumping 
+        if self.dino_jump: # is the dino jumps 
+            self.dino_rect.y -= self.jump_vel * 4 # the height of the dino numus the jump velocity 
+            self.jump_vel -= 0.8 # the jump velocity minus 0.8 
+        if self.jump_vel < -self.JUMP_VEL: # if the jump velocity is smaller than the JUMP_VEL
+            self.dino_jump = False # then dino will not jump 
+            self.jump_vel = self.JUMP_VEL # and the jump velocity and JUMP_VEL will be set equal 
 
     def draw(self, SCREEN): # create a function to draw the player onto the screen
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y)) # blit the image of the player onto the screen at the coordinates (self.dino_rect.x, self.dino_rect.y)
@@ -128,7 +129,7 @@ class Dinosaur:
 #Katie Leung's Part:
 
 class Cloud: # creates a class for the clouds that move in the background
-    def __init__(self): # initalizes an object and is called upon the creation of an object in the class this function will run with "self" as a variable the represents the instance of the object???
+    def __init__(self): # initalizes an object and is called upon the creation of an object in the class this function will run with "self" as a variable the represents the instance of the object
         self.x = SCREEN_WIDTH + random.randint(800, 1000) # sets the starting x position of the cloud will appear + a random number between 800 and 1000 from the right
         self.y = random.randint(50, 100) # sets the starting y position of the cloud, is randomized within the bounds of 50 and 100 (from the top, (0,0) is the top left corner)
         self.image = CLOUD  # makes the corresponding image of the cloud

@@ -41,7 +41,11 @@ LARGE_CACTUS = [
     pygame.image.load(os.path.join("assets/Cactus", "LargeCactus3.png")),
 ]
 
-COIN = pygame.image.load(os.path.join("assets/Coins", "coin_00.png"))
+COIN = [
+pygame.image.load(os.path.join("assets/Coins", "coin_00.png")), 
+pygame.image.load(os.path.join("assets/Coins", "coin_01.png")),
+]
+COIN = pygame.transform.scale(COIN [0], (35,35)) 
 
 BIRD = [
     pygame.image.load(os.path.join("assets/Bird", "Bird1.png")),
@@ -50,20 +54,20 @@ BIRD = [
 
 CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png"))
 
-POWER = pygame.image.load(os.path.join("assets/Power", "circle.png")) #Added image of the circle power-up
-POWER1 = pygame.transform.scale(POWER, (50,50)) #resized the circle
+POWER = pygame.image.load(os.path.join("assets/Power", "power_star1.png")) #JS Added image of the purple star power-up
+POWER1 = pygame.transform.scale(POWER, (80,65)) #JS resized the purple star to 60 x 45
 
-LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png"))
-LASER2 = pygame.image.load(os.path.join("assets/Power", "dino_laser2.png")) #Added image of the laser
-RLASER1 = pygame.transform.scale(LASER1, (300,200))
-RLASER2 = pygame.transform.scale(LASER1, (300,200))
-LASER = [RLASER1, RLASER2]
+LASER1 = pygame.image.load(os.path.join("assets/Power", "dino_laser.png")) #JS Added image of the laser
+LASER2 = pygame.image.load(os.path.join("assets/Power", "dino_laser2.png")) #JS Added image of the laser
+RLASER1 = pygame.transform.scale(LASER1, (300,200)) #JS resized the laser image to fit the scale of the game
+RLASER2 = pygame.transform.scale(LASER1, (300,200)) #JS resized the laser image to fit the scale of the game
+LASER = [RLASER1, RLASER2] #JS Made them into a list
 
 
 BG = pygame.image.load(os.path.join("assets/Other", "Track.png"))
 
-INVINCIBILITY = pygame.image.load("assets/Invincibility.png")
-INVINCIBILITY = pygame.transform.scale(INVINCIBILITY, (25,25))
+INVINCIBILITY = pygame.image.load("assets/Invincibility.png") # KL: load image of the invincibility star powerup
+INVINCIBILITY = pygame.transform.scale(INVINCIBILITY, (40,40)) # KL: resize the image to be 40 X 40
 
 FONT_COLOR=(0,0,0)
 
@@ -85,7 +89,7 @@ class Dinosaur:
         self.dino_run = True
         self.dino_jump = False
         self.dino_laser = False #added new initial start for power-up
-        self.dino_collided = 0
+        self.dino_collided = 0 #variable to set standard for dino in regular run
 
         self.step_index = 0
         self.jump_vel = self.JUMP_VEL
@@ -94,8 +98,6 @@ class Dinosaur:
         self.dino_rect.x = self.X_POS
         self.dino_rect.y = self.Y_POS
 
-        self.invincible = False #new attribute for the player
-
     def update(self, userInput):
         if self.dino_duck:
             self.duck()
@@ -103,8 +105,8 @@ class Dinosaur:
             self.run()
         if self.dino_jump:
             self.jump()
-        if self.dino_laser:
-            self.laser()
+        if self.dino_laser: #if the dino is in the state of dino_laser (it is equal to True)
+            self.laser() #execute this function
 
         if self.step_index >= 10:
             self.step_index = 0
@@ -113,24 +115,24 @@ class Dinosaur:
             self.dino_duck = False
             self.dino_run = False
             self.dino_jump = True
-            self.dino_laser = False
+            self.dino_laser = False #Set it to False
         elif userInput[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
             self.dino_run = False
             self.dino_jump = False
-            self.dino_laser = False
-        elif userInput[pygame.K_RIGHT] and not self.dino_jump:
-            if self.dino_collided > 0:
-                self.dino_duck = False
-                self.dino_run = False
-                self.dino_jump = False
-                self.dino_laser = True
-                self.dino_collided -= 1 
-            else:
-                self.dino_duck = False
-                self.dino_run = True
-                self.dino_jump = False
-                self.dino_laser = False
+            self.dino_laser = False #Set it to False
+        elif userInput[pygame.K_RIGHT] and not self.dino_jump: #If the user presses the right arrow, do the following
+            if self.dino_collided > 0: #If the dino_collided is above 0, do the following:
+                self.dino_duck = False #Set dino_duck to False
+                self.dino_run = False #Set dino_run to False
+                self.dino_jump = False #Set dino_jump to False (so not to execute this function)
+                self.dino_laser = True #Set dino_laser to True (will then allow the laser function to run)
+                self.dino_collided -= 1 #Subtract the number set to dino_collided by 1. This is to allow the superpower to be available only for an amount of time
+            else: #if it equal to 0 or below, do the following (the dino will run like normal with no superpower)
+                self.dino_duck = False #Set dino_duck to False
+                self.dino_run = True #Set dino_run to true
+                self.dino_jump = False #Set dino_jump to False
+                self.dino_laser = False #Set dino_laser to False
             
         elif not (self.dino_jump or userInput[pygame.K_DOWN]):
             self.dino_duck = False
@@ -162,42 +164,31 @@ class Dinosaur:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
     
-    def laser(self):
-        self.image = self.laser_img[self.step_index // 5]
-        self.dino_rect = self.image.get_rect()
-        self.dino_rect.x = self.X_POS + 25
-        self.dino_rect.y = self.Y_POS - 50
-        self.step_index += 1
-
-    def invincible(self):
-        self.invincible = True
-        pygame.time.set_timer(pygame.USEREVENT + 1, 5000)
-        #ignore collisions phase through obstacles until timer ends
-
-    def invincible(self):
-        self.invincible = True
-        pygame.time.set_timer(pygame.USEREVENT + 1, 5000)
-        #ignore collisions phase through obstacles until timer ends
+    def laser(self): #the laser function that will run when dino_laser is set to True
+        self.image = self.laser_img[self.step_index // 5] #Choose the laser image
+        self.dino_rect = self.image.get_rect() #Put a rectangular box around the image
+        self.dino_rect.x = self.X_POS + 25 #Put an extra width of 25 around the dino
+        self.dino_rect.y = self.Y_POS - 50 #set the y location of the dino
+        self.step_index += 1 #add one to the step_index
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))
 
-class Invincibility:
+class Invincibility: # KL: new class for the Invincibility powerup (star)
     def __init__(self, image):
-        self.x = SCREEN_WIDTH + random.randint(800, 1000)
-        self.y = 225
-        self.image = INVINCIBILITY 
-        self.rect = pygame.Rect(25, 25, 25, 25)
-        self.width = self.image.get_width()
+        self.rect = pygame.Rect(40, 40, 40, 40) # KL: set the collision box to be a 40 x 40 square
+        self.rect.x = SCREEN_WIDTH + random.randint(10000, 15000) # KL: draw the invincibility powerup at a random x location such that the powerup is relatively infrequent
+        self.rect.y = 225 # KL: set the y location to be 255
+        self.image = INVINCIBILITY # KL: get the corresponding image of the invincibility powerup
+        self.width = self.image.get_width() # KL: get the hitbox of the image of the powerup
 
-    def update(self):
-        self.x -= game_speed
-        if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
-            self.y = 225
+    def update(self): # KL: update the state of the powerup
+        self.rect.x -= game_speed # KL: the x coord of the powerup moves to the left at a speed based on game_speed
+        if self.rect.x < -self.width: # KL: if the power up moves completely off screen, do the following:
+            invincible.pop() # KL: remove the power up
 
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) # KL: blit the powerup onto the screen 
 
 
 class Cloud:
@@ -217,46 +208,36 @@ class Cloud:
         SCREEN.blit(self.image, (self.x, self.y))
 
 
-class Power: #new class for powerup
+class Power: #JS New class for powerup
     def __init__(self, image):
-        self.image = POWER1 #get image of POWER1
-        self.rect = pygame.Rect(75, 75, 75, 75) #make a square 75x75
-        self.rect.x = SCREEN_WIDTH + random.randint(800,1000) #randomize how long the width is
-        self.rect.y = 215 #keep at certain height
+        self.image = POWER1 # JS Get image of POWER1
+        self.rect = pygame.Rect(75, 75, 75, 75) #JS make a square 75x75
+        self.rect.x = SCREEN_WIDTH + random.randint(9000,10000) #JS randomize how long the width is
+        self.rect.y = 215 #JS keep at certain height
     def update(self):
-        self.rect.x -= game_speed #subtract the width from the game_speed
-        if self.rect.x < -self.rect.width: #if the width is smaller than the -width
-            powers.pop() #make it disappear
+        self.rect.x -= game_speed #JS subtract the width from the game_speed
+        if self.rect.x < -self.rect.width: #JS if the width is smaller than the -width
+            powers.pop() #JS make it disappear
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) #bring it to the surface
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y)) #JS bring it to the surface
 
 class Coin:
     def __init__(self, image):
-        self.image = coins
-        self.rect = pygame.Rect(80,300,20,20)
-        self.x = SCREEN_WIDTH
-        self.y = 310
+        self.image = COIN
+        self.rect = pygame.Rect(85,85,85,85)
+        self.rect.x = SCREEN_WIDTH + random.randint(500, 900)
+        self.rect.y = 340
+        for Obstacle in obstacles: 
+            if self.rect.colliderect(Obstacle.rect):
+                self.rect.y = 200
     def update(self):
-        self.x -= game_speed
-        if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
-            self.y = 225
-    def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+        self.rect.x -= game_speed
+        if self.rect.x < -self.rect.width:
+            coins.pop()
+        
 
-class Coin:
-    def __init__(self, image):
-        self.image = coins
-        self.rect = pygame.Rect(80,300,20,20)
-        self.x = SCREEN_WIDTH
-        self.y = 310
-    def update(self):
-        self.x -= game_speed
-        if self.x < -self.width:
-            self.x = SCREEN_WIDTH + random.randint(2500, 3000)
-            self.y = 225
     def draw(self, SCREEN):
-        SCREEN.blit(self.image, (self.x, self.y))
+        SCREEN.blit(self.image, (self.rect.x, self.rect.y))
 
 class Obstacle:
     def __init__(self, image, type):
@@ -304,7 +285,7 @@ class Bird(Obstacle):
 
 
 def main():
-    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, powers, coins
+    global game_speed, x_pos_bg, y_pos_bg, points, obstacles, invincible, powers, coins, collected, reference, invincible_react #Made more global variables to work throughout the function
     run = True
     clock = pygame.time.Clock()
     player = Dinosaur()
@@ -315,12 +296,41 @@ def main():
     points = 0
     font = pygame.font.Font("freesansbold.ttf", 20)
     obstacles = []
-    powers = []
+    powers = [] #JS start at an empty list
     death_count = 0
-    invincible = []
     coins = []
     pause = False
+    collected = 0 
+    reference = 0
+    invincible = [] # KL: create an empty list for the invicibility powerup
+    invincible_react = 0 # KL: add new variable for when the player hits the invinciblity powerup 
 
+    def Collected():
+        global reference, collected, coins
+        collected += 1
+        reference -= 1
+
+    def Collected_Screen():
+        global collected
+        with open("collected.txt", "r") as f:
+            collected_ints = [int(x) for x in f.read().split()]  
+            text = font.render("Coins: " + str(collected), True, FONT_COLOR)
+        textRect = text.get_rect()
+        textRect.center = (900, 70)
+        SCREEN.blit(text, textRect) 
+
+    def Invincible_update():
+        global invincible_react
+        if invincible_react > 0: # KL: if the player gets the invincibility power up, subtract one from invicible_react until it equals zero (acts as a timer)
+            invincible_react -= 1
+
+    def Invicibility_text():
+        global invincible_react
+        text = font.render("Invincibility: " + str(invincible_react//10), True, FONT_COLOR) # KL: write text to show how long the invibility powerup will last
+        textRect = text.get_rect() # KL: get the dimensions of the text
+        textRect.center = (900, 100) # KL: center the text
+        SCREEN.blit(text, textRect) # KL: blit it onto the screen
+        
     def score():
         global points, game_speed
         points += 1
@@ -396,40 +406,59 @@ def main():
             elif random.randint(0, 2) == 2:
                 obstacles.append(Bird(BIRD))
 
-        if len(invincible) == 0:
-            invincible.append(Invincibility(INVINCIBILITY))
-        for i in invincible:
-            i.draw(SCREEN)
-            i.update()
-            if player.dino_rect.colliderect(i.rect):
-                invincible.pop()
+        if len(invincible) == 0:  # KL: if the length of the variable invincible is equal to 0, do the following
+            invincible.append(Invincibility(INVINCIBILITY)) # KL: creates a new invincibility power up and adds it to the invincible list
+
+        for i in invincible: # KL: for every object in the list invincible, do the following
+            i.draw(SCREEN) # KL: draw the object onto the screen
+            i.update() # KL: update the object
+            if player.dino_rect.colliderect(i.rect): # KL: if the player collides with the powerup (object)
+                invincible.pop() # KL: remove the powerup from the list
+                invincible_react = 100 # KL: set the variable invicible_react to 100 (starts the timer)            
+
         for obstacle in obstacles:
             obstacle.draw(SCREEN)
             obstacle.update()
-            if player.dino_collided == 6:
-                obstacles.pop()
-            if player.dino_rect.colliderect(obstacle.rect):
+            if player.dino_collided == 6: #JS If the variable is equal to 6 (happens when the right arrow is pressed)
+                obstacles.pop() #JS Remove the obstacle infront of it
+            if player.dino_rect.colliderect(obstacle.rect) and invincible_react == 0:
                 pygame.time.delay(2000)
                 death_count += 1
                 menu(death_count)
         
-        if len(powers) == 0:
-            powers.append(Power(POWER1))
-        for power in powers:
-            power.draw(SCREEN)
-            power.update()
-            if player.dino_rect.colliderect(power.rect):
-                powers.pop()
-                player.dino_collided = 7
+        if len(powers) == 0: #JS if the length of powers (the empty list) is equal to 0, then do the following
+            powers.append(Power(POWER1)) #JS add in the power image
+        for power in powers: #JS start a for loop for the power image in the list
+            power.draw(SCREEN) #JS draw the power image
+            power.update() #JS update it
+            if player.dino_rect.colliderect(power.rect): #JS if the dino collides with the rectangular area of the power, do the following
+                powers.pop() #JS make the power image disappear
+                player.dino_collided = 7 #JS make the variable dino_collided to 7, so that it can start the function of the dino using the laser
+        
+        if len(coins) == 0:
+            coins.append(Coin(COIN))
         for c in coins:
-            SCREEN.blit(COIN, (c[0], c[1]))
+            c.draw(SCREEN)
+            c.update()
+            if player.dino_rect.colliderect(c.rect):
+                coins.pop()
+                reference = 1 
+    
+        if reference > 0:
+            Collected()
+        
                 
         background()
 
         cloud.draw(SCREEN)
         cloud.update()
 
+        Invincible_update() #KL: update the invincibility powerup 
 
+        if invincible_react > 0: #KL: only display the timer for the invincibility powerup while it is active
+            Invicibility_text()
+
+        Collected_Screen()
         score()
 
         clock.tick(30)
@@ -437,7 +466,7 @@ def main():
 
 
 def menu(death_count):
-    global points
+    global points, collected
     global FONT_COLOR
     run = True
     while run:
@@ -455,6 +484,17 @@ def menu(death_count):
         elif death_count > 0:
             text = font.render("Press any Key to Restart", True, FONT_COLOR)
             score = font.render("Your Score: " + str(points), True, FONT_COLOR)
+            amount = font.render("Coins Collected: "+ str(collected), True, FONT_COLOR)
+            amountRect = amount.get_rect()
+            amountRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 150)
+            SCREEN.blit(amount, amountRect)
+            f = open("collected.txt", "a")
+            f.write(str(collected) + "\n")
+            f.close()
+            with open("collected.txt", "r") as f:
+                amount = (
+                    f.read())
+                collected_ints = [int(x) for x in amount.split()]
             scoreRect = score.get_rect()
             scoreRect.center = (SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2 + 50)
             SCREEN.blit(score, scoreRect)
@@ -486,7 +526,6 @@ def menu(death_count):
                 exit()
             if event.type == pygame.KEYDOWN:
                 main()
-
 
 t1 = threading.Thread(target=menu(death_count=0), daemon=True)
 t1.start()

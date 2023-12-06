@@ -83,13 +83,13 @@ class Dinosaur:
         self.duck_img = DUCKING
         self.run_img = RUNNING
         self.jump_img = JUMPING
-        self.laser_img = LASER #made variable for the laser
+        self.laser_img = LASER #JS made variable for the laser
 
         self.dino_duck = False
         self.dino_run = True
         self.dino_jump = False
-        self.dino_laser = False #added new initial start for power-up
-        self.dino_collided = 0 #variable to set standard for dino in regular run
+        self.dino_laser = False #JS added new initial start for power-up
+        self.dino_collided = 0 #JS variable to set standard for dino in regular run
 
         self.step_index = 0
         self.jump_vel = self.JUMP_VEL
@@ -105,8 +105,8 @@ class Dinosaur:
             self.run()
         if self.dino_jump:
             self.jump()
-        if self.dino_laser: #if the dino is in the state of dino_laser (it is equal to True)
-            self.laser() #execute this function
+        if self.dino_laser: #JS if the dino is in the state of dino_laser (it is equal to True)
+            self.laser() #JS execute this function
 
         if self.step_index >= 10:
             self.step_index = 0
@@ -115,24 +115,24 @@ class Dinosaur:
             self.dino_duck = False
             self.dino_run = False
             self.dino_jump = True
-            self.dino_laser = False #Set it to False
+            self.dino_laser = False #JS Set it to False
         elif userInput[pygame.K_DOWN] and not self.dino_jump:
             self.dino_duck = True
             self.dino_run = False
             self.dino_jump = False
-            self.dino_laser = False #Set it to False
-        elif userInput[pygame.K_RIGHT] and not self.dino_jump: #If the user presses the right arrow, do the following
-            if self.dino_collided > 0: #If the dino_collided is above 0, do the following:
-                self.dino_duck = False #Set dino_duck to False
-                self.dino_run = False #Set dino_run to False
-                self.dino_jump = False #Set dino_jump to False (so not to execute this function)
-                self.dino_laser = True #Set dino_laser to True (will then allow the laser function to run)
-                self.dino_collided -= 1 #Subtract the number set to dino_collided by 1. This is to allow the superpower to be available only for an amount of time
-            else: #if it equal to 0 or below, do the following (the dino will run like normal with no superpower)
-                self.dino_duck = False #Set dino_duck to False
-                self.dino_run = True #Set dino_run to true
-                self.dino_jump = False #Set dino_jump to False
-                self.dino_laser = False #Set dino_laser to False
+            self.dino_laser = False #JS Set it to False
+        elif userInput[pygame.K_RIGHT] and not self.dino_jump: #JS If the user presses the right arrow, do the following
+            if self.dino_collided > 0: #JS If the dino_collided is above 0, do the following:
+                self.dino_duck = False #JS Set dino_duck to False
+                self.dino_run = False #JS Set dino_run to False
+                self.dino_jump = False #JS Set dino_jump to False (so not to execute this function)
+                self.dino_laser = True #JS Set dino_laser to True (will then allow the laser function to run)
+                self.dino_collided -= 1 #JS Subtract the number set to dino_collided by 1. This is to allow the superpower to be available only for an amount of time
+            else: #JS if it equal to 0 or below, do the following (the dino will run like normal with no superpower)
+                self.dino_duck = False #JS Set dino_duck to False
+                self.dino_run = True #JS Set dino_run to true
+                self.dino_jump = False #JS Set dino_jump to False
+                self.dino_laser = False #JS Set dino_laser to False
             
         elif not (self.dino_jump or userInput[pygame.K_DOWN]):
             self.dino_duck = False
@@ -164,12 +164,12 @@ class Dinosaur:
             self.dino_jump = False
             self.jump_vel = self.JUMP_VEL
     
-    def laser(self): #the laser function that will run when dino_laser is set to True
-        self.image = self.laser_img[self.step_index // 5] #Choose the laser image
-        self.dino_rect = self.image.get_rect() #Put a rectangular box around the image
-        self.dino_rect.x = self.X_POS + 25 #Put an extra width of 25 around the dino
-        self.dino_rect.y = self.Y_POS - 50 #set the y location of the dino
-        self.step_index += 1 #add one to the step_index
+    def laser(self): #JS the laser function that will run when dino_laser is set to True
+        self.image = self.laser_img[self.step_index // 5] #JS Choose the laser image
+        self.dino_rect = self.image.get_rect() #JS Put a rectangular box around the image
+        self.dino_rect.x = self.X_POS + 25 #JS Put an extra width of 25 around the dino
+        self.dino_rect.y = self.Y_POS - 50 #JS set the y location of the dino
+        self.step_index += 1 #JS add one to the step_index
 
     def draw(self, SCREEN):
         SCREEN.blit(self.image, (self.dino_rect.x, self.dino_rect.y))

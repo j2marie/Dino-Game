@@ -1,4 +1,4 @@
-# Group: Lexi, Katie Leung (KL) 21077481, Joy Marie Salama
+# Group: Lexi Baatje, Katie Leung (KL), Joy Marie Salama
 
 # !/usr/bin/python
 # -*- coding: utf-8 -*-
@@ -46,7 +46,7 @@ LARGE_CACTUS = [ #creates a list of the images included under this catagory
 
 BIRD = [ # creates a list of the images under this catagory 
     pygame.image.load(os.path.join("assets/Bird", "Bird1.png")), #goes into the assets folder and then the bird folder and loads the first Bird image
-    pygame.image.load(os.path.join("assets/Bird", "Bird2.png")), #goes into the assets folder and then the bird folder and loads the seonc Bird image
+    pygame.image.load(os.path.join("assets/Bird", "Bird2.png")), #goes into the assets folder and then the bird folder and loads the second Bird image
 ]
 
 CLOUD = pygame.image.load(os.path.join("assets/Other", "Cloud.png")) #goes into the assets folder and then the Other folder and loads the Cloud image
@@ -59,7 +59,7 @@ class Dinosaur: # makes a class for the dinasaur where how it moves and works wi
 
     X_POS = 80 # width of the dinasaur is set to 80 
     Y_POS = 310 # height of dinasaur is set to 310
-    Y_POS_DUCK = 340 # heght of the dinasaur when ducking set to 340 (the higher the number the lower the height)  
+    Y_POS_DUCK = 340 # height of the dinasaur when ducking set to 340 (the higher the number the lower the height)  
     JUMP_VEL = 8.5 # the height of the jump 
 
     def __init__(self): # initalizes an object and is called upon the creation of an object in the class this function will run with "self" as a variable the represents the instance of the object
@@ -78,9 +78,9 @@ class Dinosaur: # makes a class for the dinasaur where how it moves and works wi
         self.dino_rect.x = self.X_POS # sets this variable as the width of the dino defined above
         self.dino_rect.y = self.Y_POS # sets this variable as the height of the dino defined above
 
-    def update(self, userInput): # creates a finction to update the dino 
+    def update(self, userInput): # creates a function to update the dino 
         if self.dino_duck: # if the user uses the duck command (the dino duck is set to true)
-            self.duck() # make the dinoaur duck 
+            self.duck() # make the dinosaur duck 
         if self.dino_run: # while dino run is set as true 
             self.run() # make the dino run foward
         if self.dino_jump: # if the user uses the jump command (the dino jump is set to true)
@@ -91,9 +91,9 @@ class Dinosaur: # makes a class for the dinasaur where how it moves and works wi
 
         if (userInput[pygame.K_UP] or userInput[pygame.K_SPACE]) and not self.dino_jump: # If the user uses the space bar or the up arrow
             self.dino_duck = False # set dino duck to false meaning the dino does not duck 
-            self.dino_run = False # set dino run to false meaning the dino is not rinning 
+            self.dino_run = False # set dino run to false meaning the dino is not running 
             self.dino_jump = True # set dino jump to true menaing the dino will jump when the space of up arrow key is pressed 
-        elif userInput[pygame.K_DOWN] and not self.dino_jump: # If user presses the down arrow while plaing 
+        elif userInput[pygame.K_DOWN] and not self.dino_jump: # If user presses the down arrow while playing 
             self.dino_duck = True # set dino duck to true meaning that when the down arrow is pressed the dino will duck 
             self.dino_run = False # set dino run to false 
             self.dino_jump = False # set dino jump to false 
@@ -102,24 +102,24 @@ class Dinosaur: # makes a class for the dinasaur where how it moves and works wi
             self.dino_run = True # keep the dino run at true meaning it will not stop running unless the space bar, up arrow or down arrow are pressed
             self.dino_jump = False # keep the dino jump false
 
-    def duck(self): # defining what happens when the dinasaur ducks 
-        self.image = self.duck_img[self.step_index // 5] # selects the dino dunckng image when the dino is ducking 
+    def duck(self): # defining what happens when the dinosaur ducks 
+        self.image = self.duck_img[self.step_index // 5] # selects the dino ducking image when the dino is ducking 
         self.dino_rect = self.image.get_rect() # sets the rectangle around the dinosaur to a different one so that the dino is able to go below some obstacles 
         self.dino_rect.x = self.X_POS # the width of the dino stays the same  
         self.dino_rect.y = self.Y_POS_DUCK # the height of the dino while ducking is set to the vaiable defined above
         self.step_index += 1 # increasing the step index for the next frame of the ducking animation
 
-    def run(self): # defining what happens when the dinasaur runs 
+    def run(self): # defining what happens when the dinosaur runs 
         self.image = self.run_img[self.step_index // 5] # selects the dino run images while dino is running 
         self.dino_rect = self.image.get_rect() # sets the rectangle around the dinosaur 
         self.dino_rect.x = self.X_POS # the width and height of the dino stay the same 
         self.dino_rect.y = self.Y_POS
         self.step_index += 1 # increasing the step index for the next frame of the ducking animation
 
-    def jump(self):  # defining what happens when the dinasaur jumps
+    def jump(self):  # defining what happens when the dinosaur jumps
         self.image = self.jump_img # selects the dino jump image while dino is jumping 
         if self.dino_jump: # is the dino jumps 
-            self.dino_rect.y -= self.jump_vel * 4 # the height of the dino numus the jump velocity 
+            self.dino_rect.y -= self.jump_vel * 4 # the height of the dino minus the jump velocity 
             self.jump_vel -= 0.8 # the jump velocity minus 0.8 
         if self.jump_vel < -self.JUMP_VEL: # if the jump velocity is smaller than the JUMP_VEL
             self.dino_jump = False # then dino will not jump 
@@ -359,4 +359,3 @@ def menu(death_count): #Defines a function 'menu' with the variable death_count
 t1 = threading.Thread(target=menu(death_count=0), daemon=True) #Return the death count to 0, allow the program to exit
 t1.start() #Start the thread
 #Parts: Lexi: 0-123, Katie: 123-236, Joy: 236-354
-
